@@ -549,21 +549,20 @@
 <script src="quiz-data.js"></script>
 <script src="main.js"></script>
 
-<script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-    createChat({
-        // WICHTIG: Hier deine Ngrok-URL einsetzen
-        webhookUrl: 'https://c464hnhdaqxo3g1vc5acdvc8.hooks.n8n.cloud/webhook/26752c70-283a-4f07-96c4-2d0de08b8782/chat',
-        mode: 'window',
-        showWelcomeScreen: false,
-        loadPreviousSession: false,
-        defaultLanguage: 'de'
-    });
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/26752c70-283a-4f07-96c4-2d0de08b8782/chat',
+		mode: 'window',
+		showWelcomeScreen: false,
+	});
 </script>
 	
 </body>
 </html>
+
 
 
 
