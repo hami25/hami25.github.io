@@ -582,77 +582,19 @@
   </div>
 </div>
 
-<script>
-  // ==========================================
-  // URL KORRIGIERT: Deine ngrok ID + /webhook/chat
-  // ==========================================
-// ngrok Adresse + /webhook/ + Path aus n8n
-const WEBHOOK_URL = 'https://a1f5bdef5739.ngrok-free.app/webhook/chat';  
-  // Session ID erstellen (damit der Bot sich erinnert)
-  let sessionId = localStorage.getItem('chatSessionId');
-  if (!sessionId) {
-    sessionId = Math.random().toString(36).substring(7);
-    localStorage.setItem('chatSessionId', sessionId);
-  }
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-  function toggleChat() {
-    const w = document.getElementById('chat-window');
-    w.classList.toggle('hidden');
-  }
-
-  function handleKeyPress(e) { 
-    if (e.key === 'Enter') sendMessage(); 
-  }
-
-  async function sendMessage() {
-    const input = document.getElementById('chat-input');
-    const txt = input.value.trim();
-    if (!txt) return;
-
-    // 1. Deine Nachricht anzeigen
-    addMessage(txt, 'user');
-    input.value = '';
-
-    try {
-        // Lade-Anzeige (...)
-        const loading = addMessage('...', 'bot');
-
-        // 2. An n8n senden
-        const resp = await fetch(WEBHOOK_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: txt, sessionId: sessionId })
-        });
-
-        if (!resp.ok) throw new Error("Netzwerk Fehler");
-
-        const data = await resp.json();
-        loading.remove(); // Lade-Anzeige weg
-
-        // 3. Antwort anzeigen
-        // Falls dein AI Agent "output" liefert:
-        const answer = data.output || data.text || JSON.stringify(data);
-        addMessage(answer, 'bot');
-
-    } catch (e) {
-        console.error(e);
-        addMessage("⚠️ Fehler: Der Server antwortet nicht. Ist n8n und ngrok an?", 'bot');
-    }
-  }
-
-  function addMessage(text, sender) {
-    const c = document.getElementById('chat-messages');
-    const d = document.createElement('div');
-    d.className = `message ${sender}-message`;
-    d.innerHTML = text; 
-    c.appendChild(d);
-    c.scrollTop = c.scrollHeight;
-    return d;
-  }
+	createChat({
+		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+		mode: 'window',
+		showWelcomeScreen: false,
+	});
 </script>
 	
 </body>
 </html>
+
 
 
 
