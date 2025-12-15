@@ -554,30 +554,29 @@
 
   createChat({
     webhookUrl: 'https://c464hnhdaqxo3g1vc5acdvc8.hooks.n8n.cloud/webhook/1385fdfe-4475-4b72-829f-e774947e0fe4/chat',
-    mode: 'window', 
+    mode: 'window',
     showWelcomeScreen: true,
     i18n: {
       en: {
         title: 'Studien-Assistent',
-        subtitle: 'Hast du Fragen zum Modulplan?',
-        footer: '',
+        subtitle: 'Fragen zum Modulplan?',
         getStarted: 'Chat starten',
         inputPlaceholder: 'Tippe deine Frage...',
       },
     },
+    // Hier erzwingen wir nochmal das Design, falls das CSS oben nicht greift
     style: {
-      width: '400px',
-      height: '600px',
-      position: 'right',
+      position: 'right', 
       backgroundColor: '#ffffff',
-      fontFamily: 'Segoe UI, sans-serif', // Passend zu deiner Webseite
       headingColor: '#333333',
     }
   });
 </script>
+</body>
 
 </body>
 </html>
 </body>
 </html>
+
 
