@@ -550,18 +550,218 @@
 <script src="main.js"></script>
 
 
-<script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+<div id="custom-chat-widget">
+  <button id="chat-toggle-btn" onclick="toggleChat()">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+      <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z"/>
+    </svg>
+  </button>
 
-	createChat({
-		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/26752c70-283a-4f07-96c4-2d0de08b8782/chat',
-		mode: 'window',
-		showWelcomeScreen: false,
-	});
+  <div id="chat-window" class="hidden">
+    <div class="chat-header">
+      <h3>Studien-Assistent</h3>
+      <span onclick="toggleChat()" style="cursor:pointer;">&times;</span>
+    </div>
+    <div id="chat-messages">
+      <div class="message bot-message">Hallo! Ich bin dein Assistent für Wirtschaftsinformatik. Wie kann ich helfen?</div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chat-input" placeholder="Stelle deine Frage..." onkeypress="handleKeyPress(event)">
+      <button onclick="sendMessage()">Senden</button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Design für den Chat */
+  #custom-chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: 'Segoe UI', sans-serif;
+  }
+
+  #chat-toggle-btn {
+    background-color: #ee7f00; /* Deine Farbe */
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #chat-toggle-btn:hover { transform: scale(1.1); }
+
+  #chat-window {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: opacity 0.3s;
+  }
+
+  .hidden { display: none !important; }
+
+  .chat-header {
+    background: #ee7f00;
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+  }
+
+  #chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    background: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .message {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+    line-height: 1.4;
+    font-size: 0.95rem;
+  }
+
+  .bot-message {
+    background: #e0e0e0;
+    color: #333;
+    align-self: flex-start;
+    border-bottom-left-radius: 2px;
+  }
+
+  .user-message {
+    background: #ee7f00;
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 2px;
+  }
+
+  .chat-input-area {
+    padding: 10px;
+    border-top: 1px solid #eee;
+    display: flex;
+    gap: 10px;
+    background: white;
+  }
+
+  #chat-input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    outline: none;
+  }
+
+  .chat-input-area button {
+    background: #ee7f00;
+    color: white;
+    border: none;
+    padding: 0 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: bold;
+  }
+</style>
+
+<script>
+  // ==========================================
+  // KONFIGURATION: HIER DEINE NEUE WEBHOOK URL REIN
+  // ==========================================
+  // HIER DEINE NGROK ADRESSE EINTRAGEN:
+  const WEBHOOK_URL = 'https://DEINE-NGROK-ID.ngrok-free.app/webhook/chat';
+  
+  // Generiert eine zufällige ID, damit sich der Bot an das Gespräch erinnert
+  let sessionId = localStorage.getItem('chatSessionId');
+  if (!sessionId) {
+    sessionId = Math.random().toString(36).substring(7);
+    localStorage.setItem('chatSessionId', sessionId);
+  }
+
+  function toggleChat() {
+    const window = document.getElementById('chat-window');
+    window.classList.toggle('hidden');
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') sendMessage();
+  }
+
+  async function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const message = input.value.trim();
+    if (!message) return;
+
+    // 1. User Nachricht anzeigen
+    addMessage(message, 'user');
+    input.value = '';
+
+    // 2. An n8n senden
+    try {
+        // Lade-Indikator (optional)
+        const loadingMsg = addMessage('...', 'bot'); 
+
+        const response = await fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: message, 
+                sessionId: sessionId 
+            })
+        });
+
+        if (!response.ok) throw new Error('Netzwerk Fehler');
+
+        const data = await response.json();
+        
+        // Lade-Nachricht entfernen
+        loadingMsg.remove();
+
+        // 3. Bot Antwort anzeigen
+        // (n8n muss ein JSON zurückgeben wie { "output": "Der Text..." })
+        const botText = data.output || data.text || JSON.stringify(data);
+        addMessage(botText, 'bot');
+
+    } catch (error) {
+        console.error(error);
+        addMessage("Entschuldigung, ich konnte den Server nicht erreichen.", 'bot');
+    }
+  }
+
+  function addMessage(text, sender) {
+    const container = document.getElementById('chat-messages');
+    const div = document.createElement('div');
+    div.className = `message ${sender}-message`;
+    div.innerText = text;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight; // Nach unten scrollen
+    return div;
+  }
 </script>
 	
 </body>
 </html>
+
 
 
 
