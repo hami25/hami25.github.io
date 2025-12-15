@@ -550,59 +550,59 @@
 <script src="main.js"></script>
 
 <script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-	createChat({
-		// Deine URL (die hat sich nicht geändert)
-		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
-		
-		// Zeige den Chat als Fenster an
-		mode: 'window',
+    createChat({
+        // Deine ngrok-Adresse (die Leitung zum Bot)
+        webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+        
+        // Zeigt den Chat als Fenster unten rechts
+        mode: 'window',
 
-		// HIER PASST DU DAS DESIGN AN:
-		style: {
-			width: '400px',
-			height: '600px',
-			position: 'right',
-			backgroundColor: '#ffffff',
-			fontFamily: 'Segoe UI, sans-serif',
-			
-			// Das Wichtigste: Deine Orange-Farbe!
-			accentColor: '#ee7f00', 
-			
-			// Farbe der Nutzer-Sprechblasen
-			userMessage: {
-				backgroundColor: '#ee7f00',
-				textColor: '#ffffff',
-			},
-			
-			// Farbe der Bot-Sprechblasen
-			botMessage: {
-				backgroundColor: '#f4f4f4',
-				textColor: '#333333',
-			}
-		},
+        // ----------------------------------------------------
+        // HIER IST DEIN ORANGES DESIGN
+        // ----------------------------------------------------
+        style: {
+            width: '380px',
+            height: '600px',
+            position: 'right',
+            
+            // Deine Hauptfarbe (Macht Header, Button & deine Blasen ORANGE)
+            accentColor: '#ee7f00', 
+            
+            backgroundColor: '#ffffff',
+            fontFamily: 'Segoe UI, sans-serif',
+        },
 
-		// HIER PASST DU DIE TEXTE AN (Deutsch):
-		i18n: {
-			en: { // Wir überschreiben das englische Standard-Profil
-				title: 'Studien-Assistent',
-				subtitle: 'Frag mich alles zum Studium!',
-				footer: '',
-				getStarted: 'Chat starten',
-				inputPlaceholder: 'Deine Frage...',
-			},
-		},
+        // ----------------------------------------------------
+        // HIER SIND DIE DEUTSCHEN TEXTE
+        // ----------------------------------------------------
+        i18n: {
+            en: { // Wir überschreiben Englisch mit Deutsch
+                title: 'Studien-Assistent',
+                subtitle: '', // Leer lassen für cleanen Look
+                footer: '',
+                getStarted: 'Loslegen',
+                inputPlaceholder: 'Deine Frage...',
+                closeButtonTooltip: 'Schließen',
+            },
+        },
 
-		// Die erste Nachricht, die der Bot automatisch sendet
-		initialMessages: [
-			'Hallo! 👋 Ich kenne mich mit dem Modulplan aus. Was möchtest du wissen?'
-		],
-	});
+        // ----------------------------------------------------
+        // DIE BEGRÜSSUNG (Wie im Bild)
+        // ----------------------------------------------------
+        initialMessages: [
+            'Hallo! 👋 Ich bin dein Assistent. Wie kann ich helfen?'
+        ],
+        
+        // Startet direkt offen oder geschlossen? (false = geschlossen, nur Button sichtbar)
+        showWelcomeScreen: false, 
+    });
 </script>
 	
 </body>
 </html>
+
 
 
 
