@@ -553,14 +553,57 @@
 	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
 	createChat({
+		// Deine URL (die hat sich nicht geändert)
 		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+		
+		// Zeige den Chat als Fenster an
 		mode: 'window',
-		showWelcomeScreen: false,
+
+		// HIER PASST DU DAS DESIGN AN:
+		style: {
+			width: '400px',
+			height: '600px',
+			position: 'right',
+			backgroundColor: '#ffffff',
+			fontFamily: 'Segoe UI, sans-serif',
+			
+			// Das Wichtigste: Deine Orange-Farbe!
+			accentColor: '#ee7f00', 
+			
+			// Farbe der Nutzer-Sprechblasen
+			userMessage: {
+				backgroundColor: '#ee7f00',
+				textColor: '#ffffff',
+			},
+			
+			// Farbe der Bot-Sprechblasen
+			botMessage: {
+				backgroundColor: '#f4f4f4',
+				textColor: '#333333',
+			}
+		},
+
+		// HIER PASST DU DIE TEXTE AN (Deutsch):
+		i18n: {
+			en: { // Wir überschreiben das englische Standard-Profil
+				title: 'Studien-Assistent',
+				subtitle: 'Frag mich alles zum Studium!',
+				footer: '',
+				getStarted: 'Chat starten',
+				inputPlaceholder: 'Deine Frage...',
+			},
+		},
+
+		// Die erste Nachricht, die der Bot automatisch sendet
+		initialMessages: [
+			'Hallo! 👋 Ich kenne mich mit dem Modulplan aus. Was möchtest du wissen?'
+		],
 	});
 </script>
 	
 </body>
 </html>
+
 
 
 
