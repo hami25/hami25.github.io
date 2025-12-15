@@ -546,7 +546,35 @@
 </div>
 
 <script src="quiz-data.js"></script>
-
 <script src="main.js"></script>
+
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+  createChat({
+    webhookUrl: 'https://c464hnhdaqxo3g1vc5acdvc8.hooks.n8n.cloud/webhook/1385fdfe-4475-4b72-829f-e774947e0fe4/chat',
+    mode: 'window', 
+    showWelcomeScreen: true,
+    i18n: {
+      en: {
+        title: 'Studien-Assistent',
+        subtitle: 'Hast du Fragen zum Modulplan?',
+        footer: '',
+        getStarted: 'Chat starten',
+        inputPlaceholder: 'Tippe deine Frage...',
+      },
+    },
+    style: {
+      width: '400px',
+      height: '600px',
+      position: 'right',
+      backgroundColor: '#ffffff',
+      fontFamily: 'Segoe UI, sans-serif', // Passend zu deiner Webseite
+      headingColor: '#333333',
+    }
+  });
+</script>
+  
 </body>
+
 </html>
