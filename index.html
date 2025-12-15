@@ -549,39 +549,6 @@
 <script src="quiz-data.js"></script>
 <script src="main.js"></script>
 
-
-<div id="custom-chat-widget">
-  <button id="chat-toggle-btn" onclick="toggleChat()">
-    <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-      <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z"/>
-    </svg>
-  </button>
-
-  <div id="chat-window" class="hidden">
-    <div class="chat-header">
-      <div style="display:flex; align-items:center; gap:10px;">
-        <h3>Studien-Assistent</h3>
-        <span style="height:8px; width:8px; background:#81ff86; border-radius:50%; display:inline-block;" title="Online"></span>
-      </div>
-      <span onclick="toggleChat()" style="cursor:pointer; font-size:1.5rem;">&times;</span>
-    </div>
-    
-    <div id="chat-messages">
-      <div class="message bot-message">Hallo! 👋 <br>Ich bin dein Assistent. Wie kann ich helfen?</div>
-    </div>
-    
-    <div class="chat-input-area">
-      <input type="text" id="chat-input" placeholder="Deine Frage..." onkeypress="handleKeyPress(event)">
-      <button onclick="sendMessage()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="22" y1="2" x2="11" y2="13"></line>
-          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-        </svg>
-      </button>
-    </div>
-  </div>
-</div>
-
 <script type="module">
 	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
@@ -594,6 +561,7 @@
 	
 </body>
 </html>
+
 
 
 
