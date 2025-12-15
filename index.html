@@ -549,59 +549,69 @@
 <script src="quiz-data.js"></script>
 <script src="main.js"></script>
 
+<style>
+  :root {
+    /* --- FARBEN --- */
+    --chat--color-primary: #ee7f00; /* Hauptfarbe (Orange) */
+    --chat--color-primary-shade-50: #d67200; /* Dunkleres Orange (für Hover) */
+    --chat--color-primary-shade-100: #b56000;
+    
+    /* Header (Die Leiste oben) */
+    --chat--header--background: #ee7f00;
+    --chat--header--color: #ffffff;
+    
+    /* Der Runde Button unten */
+    --chat--toggle--background: #ee7f00;
+    --chat--toggle--hover--background: #d67200;
+    --chat--toggle--active--background: #b56000;
+    --chat--toggle--icon--color: #ffffff;
+    
+    /* Sprechblasen */
+    --chat--message--user--background: #ee7f00;
+    --chat--message--user--color: #ffffff;
+    --chat--message--bot--background: #f4f4f4;
+    --chat--message--bot--color: #333333;
+
+    /* --- FORMEN (Rundungen) --- */
+    --chat--window--border-radius: 20px; /* Macht das Fenster schön rund */
+    --chat--window--width: 380px;        /* Breite des Fensters */
+    --chat--window--height: 600px;       /* Höhe des Fensters */
+  }
+</style>
+
 <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-    createChat({
-        // Deine ngrok-Adresse (die Leitung zum Bot)
-        webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
-        
-        // Zeigt den Chat als Fenster unten rechts
-        mode: 'window',
+	createChat({
+		// Deine URL
+		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+		
+		mode: 'window',
 
-        // ----------------------------------------------------
-        // HIER IST DEIN ORANGES DESIGN
-        // ----------------------------------------------------
-        style: {
-            width: '380px',
-            height: '600px',
-            position: 'right',
-            
-            // Deine Hauptfarbe (Macht Header, Button & deine Blasen ORANGE)
-            accentColor: '#ee7f00', 
-            
-            backgroundColor: '#ffffff',
-            fontFamily: 'Segoe UI, sans-serif',
-        },
+		// Texte auf Deutsch
+		i18n: {
+			en: {
+				title: 'Studien-Assistent',
+				subtitle: '', 
+				footer: '',
+				getStarted: 'Chat starten',
+				inputPlaceholder: 'Deine Frage...',
+				closeButtonTooltip: 'Schließen',
+			},
+		},
 
-        // ----------------------------------------------------
-        // HIER SIND DIE DEUTSCHEN TEXTE
-        // ----------------------------------------------------
-        i18n: {
-            en: { // Wir überschreiben Englisch mit Deutsch
-                title: 'Studien-Assistent',
-                subtitle: '', // Leer lassen für cleanen Look
-                footer: '',
-                getStarted: 'Loslegen',
-                inputPlaceholder: 'Deine Frage...',
-                closeButtonTooltip: 'Schließen',
-            },
-        },
-
-        // ----------------------------------------------------
-        // DIE BEGRÜSSUNG (Wie im Bild)
-        // ----------------------------------------------------
-        initialMessages: [
-            'Hallo! 👋 Ich bin dein Assistent. Wie kann ich helfen?'
-        ],
-        
-        // Startet direkt offen oder geschlossen? (false = geschlossen, nur Button sichtbar)
-        showWelcomeScreen: false, 
-    });
+		// Begrüßung
+		initialMessages: [
+			'Hallo! 👋 Ich bin dein Assistent. Wie kann ich helfen?'
+		],
+		
+		showWelcomeScreen: false,
+	});
 </script>
 	
 </body>
 </html>
+
 
 
 
