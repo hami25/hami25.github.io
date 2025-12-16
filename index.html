@@ -836,6 +836,36 @@
 </div>
 
 
+<style>
+  :root {
+    /* --- FARBEN --- */
+    --chat--color-primary: #ee7f00; /* Hauptfarbe (Orange) */
+    --chat--color-primary-shade-50: #d67200; /* Dunkleres Orange (für Hover) */
+    --chat--color-primary-shade-100: #b56000;
+    
+    /* Header (Die Leiste oben) */
+    --chat--header--background: #ee7f00;
+    --chat--header--color: #ffffff;
+    
+    /* Der Runde Button unten */
+    --chat--toggle--background: #ee7f00;
+    --chat--toggle--hover--background: #d67200;
+    --chat--toggle--active--background: #b56000;
+    --chat--toggle--icon--color: #ffffff;
+    
+    /* Sprechblasen */
+    --chat--message--user--background: #ee7f00;
+    --chat--message--user--color: #ffffff;
+    --chat--message--bot--background: #f4f4f4;
+    --chat--message--bot--color: #333333;
+
+    /* --- FORMEN (Rundungen) --- */
+    --chat--window--border-radius: 20px; /* Macht das Fenster schön rund */
+    --chat--window--width: 380px;        /* Breite des Fensters */
+    --chat--window--height: 600px;       /* Höhe des Fensters */
+  }
+</style>
+
 <script type="module">
 	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
