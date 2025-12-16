@@ -21,34 +21,42 @@
     /* --- HAUPTFARBEN --- */
     --chat--color-primary: #ee7f00;
     
-    /* --- DUNKLES FENSTER --- */
-    --chat--window--background: #2b2b3b; /* Dunkles Grau */
+    /* --- SYSTEM-FARBEN (Punkte & Texte) --- */
+    --chat--color-text: #ffffff; 
+    --chat--color-light: #ffffff; /* Macht Lade-Punkte weiß */
+    
+    /* --- DUNKLES FENSTER & HINTERGRUND --- */
+    --chat--window--background: #2b2b3b; 
+    --chat--background: #2b2b3b;
+    --chat--message-list--background: #2b2b3b;
+    
     --chat--window--width: 380px;
     --chat--window--height: 600px;
     --chat--window--border-radius: 20px;
     
-    /* --- HEADER (Verlauf) --- */
+    /* --- HEADER --- */
     --chat--header--background: linear-gradient(135deg, #ee7f00, #ff9f40);
     --chat--header--color: #ffffff;
     
     /* --- NACHRICHTEN --- */
-    --chat--message--bot--background: #404050; /* Dunkle Blase */
-    --chat--message--bot--color: #ffffff;      /* Weiße Schrift */
+    --chat--message--bot--background: #404050; 
+    --chat--message--bot--color: #ffffff;      
     
     --chat--message--user--background: #ee7f00;
     --chat--message--user--color: #ffffff;
     
-    /* --- EINGABE-FELD --- */
+    /* --- EINGABE-FELD & SENDE-BUTTON --- */
     --chat--input--background: #2b2b3b;
     --chat--input--text-color: #ffffff;
+    --chat--input--placeholder-color: #aaaaaa;
     
-    /* --- BUTTON UNTEN --- */
+    /* Das hier repariert den weißen Kasten um den Pfeil: */
+    --chat--input-button--background: transparent; 
+    --chat--input-button--color: #ee7f00; /* Der Pfeil wird Orange */
+    
+    /* --- RUNDER TOGGLE BUTTON UNTEN --- */
     --chat--toggle--background: #ee7f00;
     --chat--toggle--icon--color: #ffffff;
-
-	/* --- SYSTEM-FARBEN --- */
-    --chat--color-text: #ffffff; /* Macht die Lade-Punkte und sonstige Texte weiß */
-    --chat--color-light: #ffffff; /* Zur Sicherheit für die Animation */
   }
 </style>
 
