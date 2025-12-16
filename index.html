@@ -846,60 +846,63 @@
 </aside>
 
 
-
-
 </div>
 
 
 <style>
   :root {
-    /* --- FARBEN --- */
-    --chat--color-primary: #ee7f00; /* Hauptfarbe (Orange) */
-    --chat--color-primary-shade-50: #d67200; /* Dunkleres Orange (für Hover) */
-    --chat--color-primary-shade-100: #b56000;
+    /* --- HAUPTFARBEN --- */
+    --chat--color-primary: #ee7f00; /* Dein Uni-Orange */
     
-    /* Header (Die Leiste oben) */
-    --chat--header--background: #ee7f00;
+    /* --- FENSTER DUNKEL MACHEN --- */
+    /* Hintergrund des Fensters (Passend zu deinem Dashboard-Grau) */
+    --chat--window--background: #2b2b3b; 
+    
+    /* Header: Verlauf von Orange zu etwas Hellerem (wirkt edler) */
+    --chat--header--background: linear-gradient(135deg, #ee7f00, #ff9f40);
     --chat--header--color: #ffffff;
     
     /* Der Runde Button unten */
     --chat--toggle--background: #ee7f00;
     --chat--toggle--hover--background: #d67200;
-    --chat--toggle--active--background: #b56000;
     --chat--toggle--icon--color: #ffffff;
     
-    /* Sprechblasen */
+    /* --- SPRECHBLASEN (Dark Mode) --- */
+    /* User: Orange */
     --chat--message--user--background: #ee7f00;
     --chat--message--user--color: #ffffff;
-    --chat--message--bot--background: #f4f4f4;
-    --chat--message--bot--color: #333333;
+    
+    /* Bot: Dunkelgrau (damit man es auf dem dunklen Hintergrund sieht) */
+    --chat--message--bot--background: #404050; 
+    --chat--message--bot--color: #ffffff; /* Weiße Schrift! */
 
-    /* --- FORMEN (Rundungen) --- */
-    --chat--window--border-radius: 20px; /* Macht das Fenster schön rund */
-    --chat--window--width: 380px;        /* Breite des Fensters */
-    --chat--window--height: 600px;       /* Höhe des Fensters */
+    /* --- EINGABEBEREICH --- */
+    /* Macht das Feld unten auch dunkel */
+    --chat--input--background: #2b2b3b;
+    --chat--input--text-color: #ffffff;
+    --chat--input--placeholder-color: #aaaaaa;
+
+    /* --- FORMEN --- */
+    --chat--window--border-radius: 20px;
+    --chat--window--width: 400px;
+    --chat--window--height: 600px;
   }
 </style>
-
-<script src="Js/berufsFinder.js"></script>
-<script src="Js/diskreteStrukturen.js"></script>
-<script src="Js/faqKarten.js"></script>
-<script src="Js/legendeFilter.js"></script>
-<script src="Js/miniQuiz.js"></script>
-<script src="Js/tabs.js"></script>
-<script src="Js/miniQuiz.js"></script>
-
 
 <script type="module">
 	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
 	createChat({
-		// Deine URL
-		webhookUrl: 'https://f032ee97d5ad.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+		// Deine aktuelle ngrok URL
+		webhookUrl: 'https://a1f5bdef5739.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
 		
 		mode: 'window',
 
-		// Texte auf Deutsch
+		// ZUSÄTZLICH: Hintergrund im JS setzen (zur Sicherheit)
+		style: {
+			backgroundColor: '#2b2b3b', 
+		},
+
 		i18n: {
 			en: {
 				title: 'Studien-Assistent',
@@ -911,7 +914,6 @@
 			},
 		},
 
-		// Begrüßung
 		initialMessages: [
 			'Hallo! 👋 Ich bin dein Assistent. Wie kann ich helfen?'
 		],
