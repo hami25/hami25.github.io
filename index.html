@@ -834,3 +834,34 @@
 
 
 </div>
+
+
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+	createChat({
+		// Deine URL
+		webhookUrl: 'https://f032ee97d5ad.ngrok-free.app/webhook/01c69b73-3405-44d0-9e7b-8e3d7dfff878/chat',
+		
+		mode: 'window',
+
+		// Texte auf Deutsch
+		i18n: {
+			en: {
+				title: 'Studien-Assistent',
+				subtitle: '', 
+				footer: '',
+				getStarted: 'Chat starten',
+				inputPlaceholder: 'Deine Frage...',
+				closeButtonTooltip: 'Schließen',
+			},
+		},
+
+		// Begrüßung
+		initialMessages: [
+			'Hallo! 👋 Ich bin dein Assistent. Wie kann ich helfen?'
+		],
+		
+		showWelcomeScreen: false,
+	});
+</script>
