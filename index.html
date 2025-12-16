@@ -19,13 +19,15 @@
 	<style>
   :root {
     /* --- HAUPTFARBEN --- */
-    --chat--color-primary: #ee7f00; /* Dein Orange */
+    --chat--color-primary: #ee7f00;
     
-    /* --- SYSTEM-FARBEN (Damit alles gut sichtbar ist) --- */
-    --chat--color-text: #ffffff;       /* Globale Textfarbe */
-    --chat--color-secondary: #ffffff;  /* Macht oft Lade-Punkte/Icons weiß */
-    --chat--color-light: #ffffff;      /* Fallback für helle Elemente */
-
+    /* -------------------------------------------------------- */
+    /* HIER IST DER FIX FÜR DIE PUNKTE (MIT DER BRECHSTANGE)    */
+    /* -------------------------------------------------------- */
+    --chat--color-secondary: #ffffff !important;          /* Macht die Punkte weiß */
+    --chat--color-secondary-shade-50: #ffffff !important; /* Macht auch Schatten weiß */
+    --chat--color-text: #ffffff !important;               /* Erzwingt weiße Schrift */
+    
     /* --- DUNKLES FENSTER & HINTERGRUND --- */
     --chat--window--background: #2b2b3b; 
     --chat--background: #2b2b3b;
@@ -35,7 +37,7 @@
     --chat--window--height: 600px;
     --chat--window--border-radius: 20px;
     
-    /* --- HEADER (Verlauf) --- */
+    /* --- HEADER --- */
     --chat--header--background: linear-gradient(135deg, #ee7f00, #ff9f40);
     --chat--header--color: #ffffff;
     
@@ -46,15 +48,14 @@
     --chat--message--user--background: #ee7f00;
     --chat--message--user--color: #ffffff;
     
-    /* --- EINGABE-FELD (Hier war der Fehler!) --- */
+    /* --- EINGABE-FELD --- */
     --chat--input--background: #2b2b3b;
     --chat--input--text-color: #ffffff;
     --chat--input--placeholder-color: #bbbbbb;
     
-    /* REPARATUR DES WEISSEN KASTENS: */
-    /* Wir geben dem Button exakt dieselbe Farbe wie dem Hintergrund */
+    /* Sende-Button Fix (damit der weiße Rand wegbleibt) */
     --chat--input-button--background: #2b2b3b !important; 
-    --chat--input-button--color: #ee7f00; /* Der Pfeil bleibt Orange */
+    --chat--input-button--color: #ee7f00;
     
     /* --- RUNDER TOGGLE BUTTON UNTEN --- */
     --chat--toggle--background: #ee7f00;
