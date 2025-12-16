@@ -1,0 +1,106 @@
+[TITLE]
+Diskrete Strukturen – und die Änderung klappt jetzt! 
+
+[INTRO]
+Hier kannst du kurz testen, ob das Modul „Diskrete Strukturen“ zu dir passt
+und was dich inhaltlich ungefähr erwartet. Ist mir eigentlich auch egal! BLABLABLA
+
+[EXP-TITLE]
+1. Was macht man in „Diskrete Strukturen“ ungefähr?
+
+[EXP-HINT]
+Wähle die Aussagen, die deiner Vorstellung am nächsten kommen.
+
+[EXP-OPTION-1]
+Man arbeitet mit Logik, Mengen, Relationen, Graphen & Beweisen.
+
+[EXP-OPTION-2]
+Man lernt hauptsächlich eine Programmiersprache auswendig.
+
+[EXP-OPTION-3]
+Man rechnet viel, aber eher „mit Symbolen/Begriffen“ als mit großen Zahlen.
+
+[EXP-OPTION-4]
+Man macht hauptsächlich UI/UX-Design und gestaltet Oberflächen.
+
+[EXP-BUTTON]
+Mein Bild vom Modul prüfen
+
+[QUIZ-TITLE]
+2. Mini-Quiz: Fachbegriffe BLABLABLA
+
+[QUIZ-HINT]
+Es geht nur ums Gefühl – perfekt muss es nicht sein.
+
+[QUIZ-Q1]
+Frage 1: Was ist typisch für eine „Menge“ in der Mathematik?
+
+[QUIZ-Q1-A]
+Eine Sammlung von Elementen (z. B. Zahlen), bei der die Reihenfolge egal ist.
+
+[QUIZ-Q1-B]
+Ein Programm, das man ausführen kann.
+
+[QUIZ-Q1-C]
+Ein spezieller Datentyp in einer Programmiersprache.
+
+[QUIZ-Q2]
+Frage 2: Womit beschäftigt sich Graphentheorie typischerweise?
+
+[QUIZ-Q2-A]
+Mit Bildern und Diagramm-Gestaltung.
+
+[QUIZ-Q2-B]
+Mit Knoten und Kanten, z. B. Netzwerken oder Wegen im Straßennetz.
+
+[QUIZ-Q2-C]
+Mit Audio- und Videosignalen.
+
+[QUIZ-Q3]
+Frage 3: Wozu braucht man logische Aussagen und Beweise in der Informatik?
+
+[QUIZ-Q3-A]
+Um sicherzustellen, dass Algorithmen korrekt sind.
+
+[QUIZ-Q3-B]
+Nur, um Prüfungen zu bestehen – sonst nie.
+
+[QUIZ-Q3-C]
+Um Farben besser auswählen zu können.
+
+[QUIZ-BUTTON]
+Quiz auswerten
+
+[DND-TITLE]
+3. Drag & Drop: ordne Begriffe zu
+
+[DND-HINT]
+Ziehe die Begriffe links zu den passenden Beschreibungen rechts.
+
+[DND-TERM-MENGE]
+Menge
+
+[DND-TERM-RELATION]
+Relation
+
+[DND-TERM-GRAPH]
+Graph
+
+[DND-DESC-GRAPH]
+Struktur aus Knoten und Kanten, z. B. für Netze oder Wegsuche.
+
+[DND-DESC-MENGE]
+Zusammenfassung von Elementen, z. B. alle geraden Zahlen.
+
+[DND-DESC-RELATION]
+Verknüpfung von Elementen zweier Mengen, z. B. „ist kleiner als“.
+
+[DND-BUTTON]
+Zuordnungen prüfen
+
+[SUMMARY-TITLE]
+4. Fazit für dich
+
+[SUMMARY-TEXT]
+Wenn dir Logik, sauberes Denken und das Arbeiten mit abstrakten Begriffen
+Spaß machen, ist „Diskrete Strukturen“ wahrscheinlich ein spannendes Modul für dich.
