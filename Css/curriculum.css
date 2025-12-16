@@ -1,0 +1,310 @@
+/* ===========================
+   CURRICULUM – DARK GLASS PANEL (KOMPAKT)
+   =========================== */
+
+.curriculum {
+  /*max-width: 1600px;
+  margin: 0 auto 3rem;*/
+  width: 100%;
+  margin: 0 0 3rem;
+  
+  padding: 1.8rem 1.4rem 2.2rem;
+  border-radius: 24px;
+
+  background: rgba(30, 41, 59, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.5);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f3f4f6;
+  
+  position: relative;   /* Bezugssystem für die Kachel */
+  /*overflow: hidden;*/     /* alles, was rausguckt, wird abgeschnitten */
+}
+  
+
+
+
+.curriculum h2 {
+  margin: 0 0 1.6rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #f9fafb;
+}
+
+.curriculum h2::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 0.7rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f4c289, #8dd3ce);
+}
+
+/* ===========================
+   SEMESTER ROWS (KOMPAKT)
+   =========================== */
+
+.semester-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* ===========================
+   SEMESTER LABEL (kompakter)
+   =========================== */
+
+.semester-label {
+  width: 90px;
+
+  background: linear-gradient(180deg, #f6921e 0%, #f4c289 100%);
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.15rem;
+  border-radius: 14px;
+
+  padding: 0.4rem 0.3rem;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+}
+
+.semester-number {
+  font-size: 1.9rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.semester-cp {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* ===========================
+   MODULE AREA (KOMPAKT)
+   =========================== */
+
+.semester-modules {
+  display: flex;
+  flex: 1;
+  gap: 0.55rem;
+  align-items: stretch;
+}
+
+.module {
+  position: relative;
+
+  background: #ffffff;
+  color: #000;
+
+  padding: 0.7rem 1.2rem 0.8rem;
+  border-radius: 14px;
+  min-height: 56px;
+
+  flex: 1 1 120px;
+  min-width: 0;
+
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease;
+}
+
+.module:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+}
+
+.module-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  hyphens: auto;
+}
+
+.module-cp {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.55rem;
+  font-size: 0.72rem;
+  opacity: 0.9;
+}
+
+/* ===========================
+   COLOR BARS
+   =========================== */
+
+.module::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  border-radius: 14px 14px 0 0;
+}
+
+/* KLARE PASTELLFLÄCHEN */
+
+/* BWL */
+.mod-bwl {
+  background: #fde4ea;
+}
+.mod-bwl::before {
+  background: #f44b75;
+}
+
+/* WI */
+.mod-wi {
+  background: #fdf5ed;
+}
+.mod-wi::before {
+  background: #f6921e;
+}
+
+/* Informatik */
+.mod-info {
+  background: #edf8f7;
+}
+.mod-info::before {
+  background: #8dd3ce;
+}
+
+/* Mathematik */
+.mod-math {
+  background: #f9e8ef;
+}
+.mod-math::before {
+  background: #d86a95;
+}
+
+/* Qualifikationen */
+.mod-qual {
+  background: #f3f6df;
+}
+.mod-qual::before {
+  background: #b4c530;
+}
+
+/* WI + Info */
+.mod-wi-info {
+  background: linear-gradient(
+    to right,
+    #edf8f7 35%,
+    #fdf5ed 65%
+  );
+}
+.mod-wi-info::before {
+  background: linear-gradient(to right, #8dd3ce 50%, #f6921e 50%);
+}
+
+/* ===========================
+   EGOV LABELS
+   =========================== */
+
+.mod-egov::before {
+  content: "eGov";
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.12rem 0.3rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom-left-radius: 14px;
+  font-size: 0.65rem;
+}
+
+.module.mod-wi-info.mod-egov::before {
+  background: linear-gradient(
+    to right,
+    #8dd3ce 0%,
+    #8dd3ce 45%,
+    #f4c289 45%,
+    #f4c289 85%,
+    #555     85%,
+    #555     100%
+  );
+}
+
+.module.mod-wi.mod-egov::before {
+  background: linear-gradient(
+    to right,
+    #f4c289 0%,
+    #f4c289 80%,
+    #555    80%,
+    #555    100%
+  );
+}
+
+.module.mod-egov::after {
+  content: "eGov";
+  position: absolute;
+  top: 0;
+  right: 6px;
+  height: 7px;
+  display: flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #fff;
+  pointer-events: none;
+}
+
+/* ===========================
+   MODULE POPUP (leicht verkleinert)
+   =========================== */
+
+.module-popup {
+  position: absolute;
+  left: 50%;
+  bottom: 108%;
+  transform: translateX(-50%);
+  max-width: 260px;
+  padding: 0.6rem 0.8rem;
+  background: #fff;
+  color: #000;
+
+  border-radius: 9px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.module-popup::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.module:hover .module-popup {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-3px);
+}
+
+
+
+
+

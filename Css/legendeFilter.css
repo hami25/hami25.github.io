@@ -1,0 +1,199 @@
+/* ===========================
+   LEGEND / FILTER-BAR (Tabs-Style)
+   =========================== */
+
+/* Container der Legende – dunkler Hintergrund wie Tabs */
+.legend-filter {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.8rem;
+  margin: 1.4rem 0 1.2rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.90);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.45);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* Label "Filter:" links */
+.legend-filter .legend-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e5e7eb;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+/* Grundstil für alle Filter-Chips
+   Hintergrundfarbe kommt aus .legend-bwl, .legend-wi, ... */
+.legend-filter .legend-item {
+  border: none;
+  border-radius: 999px;
+  padding: 0.28rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+
+  color: #111; /* Standard-Schrift, wird bei Bedarf von Farbklassen überschrieben */
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.35);
+  transform: translateY(0) scale(0.98);
+  opacity: 0.9;
+
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease,
+    opacity 0.15s ease;
+}
+
+/* Hover: leichter „Lift“ wie bei den Tabs */
+.legend-filter .legend-item:hover {
+  transform: translateY(-1px) scale(1);
+  opacity: 1;
+}
+
+/* Aktive Filter – mehrere möglich */
+.legend-filter .legend-item.is-active {
+  transform: translateY(-1px) scale(1.03);
+  opacity: 1;
+  box-shadow:
+    0 0 0 2px rgba(248, 250, 252, 0.9),
+    0 12px 26px rgba(15, 23, 42, 0.55);
+  filter: brightness(1.05) saturate(1.06);
+}
+
+/* Inaktive Filter leicht zurücknehmen (optional) */
+.legend-filter .legend-item:not(.is-active) {
+  opacity: 0.85;
+}
+
+/* ===========================
+   FARBCODES DER FILTER (bleiben wie deine Module)
+   =========================== */
+
+/* BWL (kräftiges Rosa) */
+.legend-filter .legend-bwl {
+  background: #f44b75;
+}
+
+/* WI (Orange) */
+.legend-filter .legend-wi {
+  background: #f6921e;
+}
+
+/* Informatik (Mintgrün) */
+.legend-filter .legend-info {
+  background: #8dd3ce;
+}
+
+/* WI + Info (split gradient) */
+.legend-filter .legend-wi-info {
+  background: linear-gradient(to right, #8dd3ce 50%, #f6921e 50%);
+}
+
+/* Mathematik (Pink-Lila) */
+.legend-filter .legend-math {
+  background: #d86a95;
+}
+
+/* fachübergreifende Qualifikationen (Gelbgrün) */
+.legend-filter .legend-qual {
+  background: #b4c530;
+}
+
+/* eGov (dunkelgrau) – weiße Schrift für Kontrast */
+.legend-filter .legend-egov {
+  background: #555;
+  color: #fff;
+}
+
+/* "Alle anzeigen" neutral grau */
+.legend-filter .legend-all {
+  background: #e0e0e0;
+  color: #000;
+}
+
+/* ===========================
+   DIMMEN VON MODULEN (optional, falls genutzt)
+   =========================== */
+
+/* Nur Module werden ausgegraut – Buttons bleiben bunt */
+.curriculum .module.is-dimmed {
+  opacity: 0.25;
+  filter: grayscale(1);
+  pointer-events: none;
+}
+
+
+/* ============
+   BUBBLE / BADGE für Filter-Chips
+   ============ */
+    
+/* Grundstruktur für Bubble */
+.legend-filter .legend-item::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+/* Bubble wird beim Hover oder Aktiv größer */
+.legend-filter .legend-item:hover::before,
+.legend-filter .legend-item.is-active::before {
+  transform: scale(1.25);
+  box-shadow: 0 0 6px rgba(255,255,255,0.5);
+}
+
+/* =====================================
+   Farbanpassung der Bubble je Kategorie
+   ===================================== */
+    
+/* BWL (Rosa) */
+.legend-filter .legend-bwl::before {
+  background: #f44b75;
+}
+
+/* WI (Orange) */
+.legend-filter .legend-wi::before {
+  background: #f6921e;
+}
+
+/* Informatik (Mintgrün) */
+.legend-filter .legend-info::before {
+  background: #8dd3ce;
+}
+
+/* WI + Info (Split-Farb-Bubble) */
+.legend-filter .legend-wi-info::before {
+  background: linear-gradient(to right, #8dd3ce 50%, #f6921e 50%);
+}
+
+/* Mathematik (Pink-Lila) */
+.legend-filter .legend-math::before {
+  background: #d86a95;
+}
+
+/* Qualifikationen (Gelbgrün) */
+.legend-filter .legend-qual::before {
+  background: #b4c530;
+}
+
+/* eGov (Grau) */
+.legend-filter .legend-egov::before {
+  background: #555;
+}
+
+/* "Alle anzeigen" – neutrale Bubble */
+.legend-filter .legend-all::before {
+  background: #ccc;
+}

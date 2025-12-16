@@ -1,0 +1,64 @@
+.faq-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.faq-modal.is-open {
+  display: block;
+}
+
+.faq-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.faq-modal-dialog {
+  position: relative;
+  width: 1000px;          /* feste Breite */
+  /*height: 800px;   */      /* feste Höhe */
+  max-width: 90vw;       /* auf kleinen Bildschirmen responsiv */
+  max-height: 90vh;
+  margin: auto;          /* perfekt zentriert */
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1.8rem;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow-y: auto;       /* Scrollen NUR im Fenster, nicht ganze Seite */
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+}
+
+.faq-modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* FAQ IM MODAL: inneres "Fenster" flach machen */
+.faq-modal-dialog .faq-hand {
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0 1.5rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Karten-Container im Modal ohne extra Panel-Abstand */
+.faq-modal-dialog .fh-hand {
+  margin-top: 1.5rem;
+  padding: 0;
+}
+
+/* Sicherheit: im Modal keine Transformation auf dem gesamten Block */
+.faq-modal-dialog .faq-hand,
+.faq-modal-dialog .fh-hand {
+  transform: none;
+}

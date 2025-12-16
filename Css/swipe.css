@@ -1,0 +1,158 @@
+.career-swipe {
+    max-width: 480px;
+    margin: 2rem auto;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #ffffff;
+  }
+
+  .career-swipe h2 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-size: 1.6rem;
+    text-align: center;
+  }
+
+  .cs-intro {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: center;
+    margin-bottom: 1.2rem;
+  }
+
+  .cs-progress {
+    text-align: center;
+    margin-bottom: 0.8rem;
+    font-size: 0.9rem;
+    color: #777;
+  }
+
+  .cs-card {
+    position: relative;
+    background: linear-gradient(135deg, #f5f7ff, #eef9ff);
+    border-radius: 18px;
+    padding: 1.4rem 1.2rem;
+    min-height: 170px;
+    overflow: hidden;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .cs-card.swipe-out {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+
+  .cs-pill {
+    display: inline-block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.06);
+    color: #555;
+    margin-bottom: 0.5rem;
+  }
+
+  .cs-emoji {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .cs-title {
+    margin: 0 0 0.3rem;
+    font-size: 1.3rem;
+  }
+
+  .cs-desc {
+    margin: 0 0 0.8rem;
+    font-size: 0.9rem;
+    color: #444;
+  }
+
+  .cs-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+
+  .cs-tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: rgba(0,0,0,0.05);
+  }
+
+  .cs-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .cs-btn {
+    flex: 1;
+    border: none;
+    border-radius: 999px;
+    padding: 0.6rem 0.8rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+    white-space: nowrap;
+  }
+
+  .cs-btn-no {
+    background: #f3f3f5;
+  }
+
+  .cs-btn-yes {
+    background: #007acc;
+    color: #fff;
+  }
+
+  .cs-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+  }
+
+  .cs-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+
+  .cs-result {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+    font-size: 0.95rem;
+  }
+
+  .cs-result h3 {
+    margin-top: 0;
+    margin-bottom: 0.6rem;
+    font-size: 1.2rem;
+  }
+
+  .cs-result ul {
+    padding-left: 1.1rem;
+    margin: 0.4rem 0 0.8rem;
+  }
+
+  .cs-result li {
+    margin-bottom: 0.25rem;
+  }
+
+  .cs-note {
+    font-size: 0.8rem;
+    color: #777;
+  }
+
+
+  @media (max-width: 600px) {
+    .career-swipe {
+      margin: 1rem;
+      padding: 1.2rem;
+    }
+  }

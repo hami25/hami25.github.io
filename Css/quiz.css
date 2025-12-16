@@ -1,0 +1,148 @@
+/* Wrapper für den Start-Button */
+.wi-quiz-launcher {
+  margin: 3rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Großer, farbiger Start-Button */
+.wi-quiz-start-btn {
+  padding: 1rem 2.8rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 1.05rem;
+  cursor: pointer;
+  background: linear-gradient(90deg, #f4c289, #8dd3ce);
+  color: #fff;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.wi-quiz-start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  filter: brightness(1.05);
+}
+
+/* Modal-Overlay */
+.wi-quiz-modal {
+  position: fixed;
+  inset: 0;
+  display: none;              /* wird per JS auf block gesetzt */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.wi-quiz-modal.is-open {
+  display: flex;
+}
+
+/* Verdunkelung */
+.wi-quiz-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+}
+
+/* Dialog */
+.wi-quiz-dialog {
+  position: relative;
+  max-width: 650px;
+  width: 100%;
+  margin: 1rem;
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.25);
+  z-index: 1;
+}
+
+/* Inhalt im Dialog */
+.wi-quiz-inner {
+  padding: 1.5rem 1.8rem 1.6rem;
+}
+
+.wi-quiz-inner h3 {
+  margin-top: 0;
+  margin-bottom: .4rem;
+}
+
+.wi-quiz-intro {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+  color: #444;
+}
+
+/* Close-Button oben rechts */
+.wi-quiz-close-btn {
+  position: absolute;
+  top: .4rem;
+  right: .6rem;
+  border: none;
+  background: transparent;
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Einzelne Frage */
+.wi-quiz-question {
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+.wi-quiz-question + label {
+  margin-top: .2rem;
+}
+
+.wi-quiz-step label {
+  display: block;
+  font-size: .9rem;
+  margin-bottom: .25rem;
+  cursor: pointer;
+}
+
+.wi-quiz-step input[type="radio"] {
+  margin-right: .35rem;
+}
+
+/* Navigation im Quiz */
+.wi-quiz-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: .5rem;
+}
+
+.wi-quiz-nav-btn {
+  flex: 1;
+  padding: .55rem .8rem;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+.wi-quiz-nav-btn[disabled] {
+  opacity: .4;
+  cursor: default;
+}
+
+.wi-quiz-nav-btn-primary {
+  background: #8dd3ce;
+  border-color: #8dd3ce;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* Ergebnisbox */
+.wi-quiz-result {
+  margin-top: 1.3rem;
+  padding: .9rem 1.1rem;
+  border-radius: 10px;
+  background: #f5f5f5;
+  font-size: .95rem;
+}

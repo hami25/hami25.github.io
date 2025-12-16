@@ -1,0 +1,67 @@
+/* Container */
+.wi-tabs-funky {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem;
+  border-radius: 99px;
+  background: rgba(15, 23, 42, 0.85);      /* dunkel, leicht transparent */
+  backdrop-filter: blur(10px);             /* Glassmorphism */
+  margin: 1.5rem 0 2rem;
+}
+
+/* einzelne Tabs */
+.wi-tabs-funky .wi-tab {
+  position: relative;
+  border: none;
+  background: transparent;
+  color: #e5e7eb;
+  font-size: 0.95rem;
+  font-weight: 500;
+  padding: 0.5rem 1.2rem 0.5rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  z-index: 2;
+  transition: color 0.25s ease, transform 0.15s ease;
+}
+
+/* Icon aus data-Attribut */
+.wi-tabs-funky .wi-tab::before {
+  content: attr(data-icon);
+  font-size: 1.1rem;
+}
+
+/* Hover-Effekt */
+.wi-tabs-funky .wi-tab:hover {
+  transform: translateY(-1px);
+}
+
+/* Aktiver Tab (Textfarbe) */
+.wi-tabs-funky .wi-tab.is-active {
+  color: #f9fafb;
+}
+
+/* Leuchtender, gleitender Indikator */
+.wi-tabs-funky .wi-tab-indicator {
+  position: absolute;
+  inset: 0;
+  margin: 0.2rem;
+  border-radius: 999px;
+  background: radial-gradient(circle at 0% 0%, #22d3ee, #3b82f6, #a855f7);
+  opacity: 0.9;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+  z-index: 1;
+  pointer-events: none;
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+/* Fallback: wenn kein JS läuft, Indikator unter dem ersten Tab platzieren */
+.wi-tabs-funky:not(.wi-tabs-enhanced) .wi-tab-indicator {
+  width: 25%;
+}
+
+
