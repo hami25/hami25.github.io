@@ -19,12 +19,13 @@
 	<style>
   :root {
     /* --- HAUPTFARBEN --- */
-    --chat--color-primary: #ee7f00;
+    --chat--color-primary: #ee7f00; /* Dein Orange */
     
-    /* --- SYSTEM-FARBEN (Punkte & Texte) --- */
-    --chat--color-text: #ffffff; 
-    --chat--color-light: #ffffff; /* Macht Lade-Punkte weiß */
-    
+    /* --- SYSTEM-FARBEN (Damit alles gut sichtbar ist) --- */
+    --chat--color-text: #ffffff;       /* Globale Textfarbe */
+    --chat--color-secondary: #ffffff;  /* Macht oft Lade-Punkte/Icons weiß */
+    --chat--color-light: #ffffff;      /* Fallback für helle Elemente */
+
     /* --- DUNKLES FENSTER & HINTERGRUND --- */
     --chat--window--background: #2b2b3b; 
     --chat--background: #2b2b3b;
@@ -34,7 +35,7 @@
     --chat--window--height: 600px;
     --chat--window--border-radius: 20px;
     
-    /* --- HEADER --- */
+    /* --- HEADER (Verlauf) --- */
     --chat--header--background: linear-gradient(135deg, #ee7f00, #ff9f40);
     --chat--header--color: #ffffff;
     
@@ -45,14 +46,15 @@
     --chat--message--user--background: #ee7f00;
     --chat--message--user--color: #ffffff;
     
-    /* --- EINGABE-FELD & SENDE-BUTTON --- */
+    /* --- EINGABE-FELD (Hier war der Fehler!) --- */
     --chat--input--background: #2b2b3b;
     --chat--input--text-color: #ffffff;
-    --chat--input--placeholder-color: #aaaaaa;
+    --chat--input--placeholder-color: #bbbbbb;
     
-    /* Das hier repariert den weißen Kasten um den Pfeil: */
-    --chat--input-button--background: transparent; 
-    --chat--input-button--color: #ee7f00; /* Der Pfeil wird Orange */
+    /* REPARATUR DES WEISSEN KASTENS: */
+    /* Wir geben dem Button exakt dieselbe Farbe wie dem Hintergrund */
+    --chat--input-button--background: #2b2b3b !important; 
+    --chat--input-button--color: #ee7f00; /* Der Pfeil bleibt Orange */
     
     /* --- RUNDER TOGGLE BUTTON UNTEN --- */
     --chat--toggle--background: #ee7f00;
