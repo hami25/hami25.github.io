@@ -1,0 +1,148 @@
+// ===================================
+// ZUSTANDS-VARIABLEN
+// ===================================
+let currentQuizId = null;
+let currentQuestionIndex = 0;
+let score = 0;
+let aktuellesQuiz = null;
+
+// Holt sich die Haupt-Elemente des Modals
+const quizModal = document.getElementById('quiz-modal');
+const quizInhalt = document.getElementById('quiz-inhalt');
+
+// ===================================
+// GRUNDFUNKTIONEN
+// ===================================
+
+// Karte umdrehen
+function flipCard(element) {
+    element.classList.toggle('flipped');
+}
+
+// 1. STARTET DAS QUIZ (wird vom Button aufgerufen)
+function openQuizModal(quizId, event) {
+    if (event) event.stopPropagation(); 
+
+    aktuellesQuiz = quizDaten[quizId];
+    
+    // Falls das Quiz nicht in der quiz-data.js existiert
+    if (!aktuellesQuiz) {
+        alert("Quiz für dieses Modul ist noch in Arbeit!");
+        return;
+    }
+
+    // Setzt alles auf Anfang
+    currentQuestionIndex = 0;
+    score = 0;
+
+    // Startet die Anzeige
+    showQuestion();
+    
+    quizModal.style.display = "flex"; // Macht das Modal sichtbar
+}
+
+// 2. ZEIGT DIE AKTUELLE FRAGE AN (inkl. Level-Badge)
+function showQuestion() {
+    const frageData = aktuellesQuiz.fragen[currentQuestionIndex];
+    
+    // Schwierigkeitsgrad bestimmen (Standard: einfach)
+    const level = frageData.level || "einfach";
+    const badgeClass = level === "schwer" ? "badge-schwer" : "badge-einfach";
+
+    // Das gesamte Modal-Innere wird hier neu aufgebaut
+    quizInhalt.innerHTML = `
+        <div class="quiz-header">
+            <span class="level-badge ${badgeClass}">${level.toUpperCase()}</span>
+        </div>
+        <h3 style="margin-top:0; color:#ee7f00;">${aktuellesQuiz.titel}</h3>
+        <p class="quiz-frage"><strong>Frage ${currentQuestionIndex + 1}:</strong> ${frageData.frage}</p>
+        <div id="options-list"></div>
+        <div id="feedback-area" style="margin-top:15px; font-weight:bold;"></div>
+    `;
+
+    // Optionen generieren
+    const container = document.getElementById('options-list');
+    frageData.optionen.forEach((text, i) => {
+        const opt = document.createElement('div');
+        opt.className = 'quiz-option';
+        opt.innerText = text;
+        opt.onclick = () => selectAnswer(i);
+        container.appendChild(opt);
+    });
+}
+
+// 3. WERTET DIE ANTWORT AUS
+function selectAnswer(selectedIndex) {
+    const frageData = aktuellesQuiz.fragen[currentQuestionIndex];
+    const optionen = document.querySelectorAll('.quiz-option');
+    const feedback = document.getElementById('feedback-area');
+
+    // Alle Optionen "deaktivieren", damit man nicht nochmal klickt
+    optionen.forEach(opt => {
+        opt.style.pointerEvents = "none";
+        opt.style.opacity = "0.7";
+    });
+
+    if (selectedIndex === frageData.antwort) {
+        // Richtig!
+        score++;
+        optionen[selectedIndex].style.backgroundColor = "#e8f5e9"; // Hellgrün
+        optionen[selectedIndex].style.borderColor = "#4caf50";
+        optionen[selectedIndex].style.opacity = "1";
+        feedback.innerHTML = "<span style='color:#4caf50;'>Richtig! ✓</span>";
+    } else {
+        // Falsch!
+        optionen[selectedIndex].style.backgroundColor = "#ffebee"; // Hellrot
+        optionen[selectedIndex].style.borderColor = "#f44336";
+        optionen[selectedIndex].style.opacity = "1";
+        
+        // Die korrekte Antwort zeigen
+        optionen[frageData.antwort].style.backgroundColor = "#e8f5e9";
+        optionen[frageData.antwort].style.borderColor = "#4caf50";
+        optionen[frageData.antwort].style.opacity = "1";
+
+        feedback.innerHTML = "<span style='color:#f44336;'>Leider falsch.</span>";
+    }
+
+    // Button für "Nächste Frage" oder "Ergebnis"
+    const btn = document.createElement('button');
+    btn.className = 'quiz-btn';
+    
+    if (currentQuestionIndex < aktuellesQuiz.fragen.length - 1) {
+        btn.innerText = "Nächste Frage";
+        btn.onclick = () => { currentQuestionIndex++; showQuestion(); };
+    } else {
+        btn.innerText = "Ergebnis anzeigen";
+        btn.onclick = showResult;
+    }
+    feedback.appendChild(btn);
+}
+
+// 4. ZEIGT DAS ENDERGEBNIS
+function showResult() {
+    const anzahlFragen = aktuellesQuiz.fragen.length;
+    const prozent = Math.round((score / anzahlFragen) * 100);
+
+    quizInhalt.innerHTML = `
+        <div style="text-align:center; padding:20px;">
+            <h2 style="color:#ee7f00;">Quiz beendet!</h2>
+            <p style="font-size:1.4rem;">Du hast <strong>${score} von ${anzahlFragen}</strong> Fragen richtig beantwortet.</p>
+            <p>Das entspricht einer Erfolgsquote von <strong>${prozent}%</strong>.</p>
+            <button class="quiz-btn" onclick="closeQuizModal()">Zurück zur Übersicht</button>
+        </div>
+    `;
+}
+
+// 5. SCHLIESST DAS MODAL
+function closeQuizModal() {
+    quizModal.style.display = "none";
+    // Optional: Hier könnte man den Willkommenstext wieder herstellen, 
+    // aber meistens reicht das Schließen des Fensters.
+}
+
+// ===================================
+// EXPORT FÜR HTML
+// ===================================
+window.flipCard = flipCard;
+window.openQuizModal = openQuizModal;
+window.closeQuizModal = closeQuizModal;

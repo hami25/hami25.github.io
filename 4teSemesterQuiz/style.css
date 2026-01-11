@@ -1,0 +1,338 @@
+  /* Grundlayout */
+  body { font-family: 'Segoe UI', sans-serif; background: #f4f4f4; padding: 20px; }
+  
+  .modultafel {
+    display: flex;
+    flex-direction: column-reverse; /* Semester 1 unten, 7 oben */
+    gap: 15px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* Eine Semester-Zeile */
+  .semester-row {
+    display: flex;
+    height: 160px; /* Höhe der Karten */
+  }
+
+  .module-name {
+  font-weight: 600;
+  
+  /* 1. ETWAS KLEINERE SCHRIFT */
+  font-size: 0.85rem; /* Vorher war es 0.95rem. Spiel hier mit dem Wert! */
+  
+  /* 2. UMBRUCH ERLAUBEN (WICHTIG!) */
+  overflow-wrap: break-word;
+  word-wrap: break-word; /* Fallback für ältere Browser */
+}
+
+  /* Der orangene Kasten links (Semesterzahl) */
+  .semester-label {
+    background-color: #ee7f00; /* Das Uni-Orange */
+    color: white;
+    width: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    margin-right: 15px;
+    flex-shrink: 0;
+  }
+  .sem-number { font-size: 3rem; line-height: 1; }
+  .cp-total { font-size: 0.8rem; margin-top: 5px; }
+
+  /* Das Raster für die Module (30 CP = 6 Spalten) */
+  .module-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr); /* 6 gleich große Spalten */
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* --- 3D FLIP EFFEKT START --- */
+  .card-container {
+    perspective: 1000px;
+    cursor: pointer;
+  }
+
+  /* Breiten basierend auf CP (Grid Spalten) */
+  .cp-5  { grid-column: span 1; }
+  .cp-10 { grid-column: span 2; }
+  .cp-15 { grid-column: span 3; }
+  .cp-30 { grid-column: span 6; }
+
+  .card {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transition: transform 0.8s;
+    transform-style: preserve-3d;
+  }
+
+  .card-container.flipped .card {
+    transform: rotateY(180deg);
+  }
+
+  .front, .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    box-sizing: border-box;
+    padding: 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  /* Vorderseite Design */
+  .front {
+    background-color: #eef5f5; /* Helles Grau/Blau aus dem Bild */
+    border-top: 8px solid #ccc; /* Platzhalter Farbe */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  /* Spezifische Farben für die Fachbereiche */
+.informatik .front { border-color: #009682; } /* Türkis */
+.wirtschaft .front { border-color: #ee7f00; } /* Orange */
+.bwl .front { border-color: #d0004b; }        /* Rot/Pink */
+.mathe .front { border-color: #9c2aa0; }      /* Lila */
+
+/* Deine neuen grünen Fächer */
+.wiarbeiten .front   { border-color: #AECF43; } /* hellgrün */
+.itrecht .front      { border-color: #AECF43; } /* hellgrün */
+.international .front { border-color: #AECF43; } /* hellgrün */
+
+
+  .module-name { font-weight: 600; font-size: 0.95rem; }
+  .module-cp { text-align: right; font-size: 0.8rem; color: #666; }
+
+  /* Rückseite (Quiz) Design */
+  .back {
+    background-color: #333;
+    color: white;
+    transform: rotateY(180deg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .quiz-btn {
+    margin-top: 10px;
+    padding: 5px 15px;
+    background: #ee7f00;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  
+  .quiz-btn:hover { background: #cc6d00; }
+
+
+  /* Der dunkle Hintergrund (standardmäßig versteckt) */
+.modal-overlay {
+  display: none; /* WICHTIG: Standardmäßig versteckt */
+  position: fixed; /* Bleibt an einer Stelle, auch beim Scrollen */
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7); /* Halbdurchsichtiges Schwarz */
+
+  /* Zum Zentrieren des Inhalts */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Die weiße Box in der Mitte */
+.modal-content {
+  background-color: #fefefe;
+  color: #333;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 700px; /* Maximale Breite des Popups */
+  position: relative;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Der "Schließen"-Knopf (X) */
+.close-btn {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+  font-size: 32px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.close-btn:hover {
+  color: #333;
+}
+
+/* Kleine Animation beim Öffnen */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- Styling für die Quiz-Fragen --- */
+.quiz-frage {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.quiz-option {
+  display: block;
+  background: #f0f0f0;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+.quiz-option:hover {
+  background: #e0e0e0;
+  border-color: #ee7f00; /* Deine Akzentfarbe */
+}
+
+/* Wendet das Styling nur auf den Willkommens-Inhalt an */
+#quiz-inhalt {
+  text-align: center; /* Zentriert alles */
+  padding: 1rem 1.5rem 1.5rem 1.5rem; /* Mehr Platz */
+}
+
+/* 1. Die Haupt-Überschrift */
+#quiz-inhalt h1 {
+  font-size: 2.1rem; /* Größer und wuchtiger */
+  font-weight: 700;
+  color: #2c3e50; /* Ein dunkles, sattes Blau/Grau */
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+/* 2. Der Untertitel (ersetzt "Starte das Quiz!") */
+#quiz-inhalt h2 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: #ee7f00; /* Deine Akzentfarbe als Blickfang */
+  margin-top: 0;
+  margin-bottom: 2rem; /* Schafft Platz zur Liste */
+}
+
+/* 3. Der kleine Einleitungstext (den du hattest) */
+#quiz-inhalt > p {
+  font-size: 1.1rem;
+  color: #555;
+  max-width: 500px;
+  margin: 0 auto 1.5rem auto; /* Zentriert den Textblock */
+}
+
+/* 4. Die Anleitungs-Liste (die du schon hast) */
+.anleitung-liste {
+  list-style: none;
+  padding: 0;
+  max-width: 500px;
+  margin: 2rem auto 2.5rem auto; /* Zentriert die Liste */
+  text-align: left; /* Text in den Boxen ist linksbündig */
+}
+
+.anleitung-liste li {
+  background: #ffffff; /* Weißer Hintergrund */
+  border: 1px solid #e0e0e0; /* Dezenter Rand */
+  border-radius: 8px;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04); /* Leichter Schatten */
+  position: relative; /* Wichtig für den Akzent-Balken */
+  overflow: hidden; /* Hält den Akzent-Balken sauber */
+}
+
+/* Fügt den orangen Akzent-Balken links hinzu */
+.anleitung-liste li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px; /* Dicke des Balkens */
+  background-color: #ee7f00; /* Deine Akzentfarbe */
+}
+
+.anleitung-liste li strong {
+  display: block;
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.anleitung-liste li p {
+  margin: 0;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* 5. Der "Los geht's"-Button (wird zum "Pill-Button") */
+#quiz-inhalt .quiz-btn {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 12px 35px; /* Größerer Button */
+  border-radius: 50px; /* Macht ihn rund */
+  background: #ee7f00;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease; /* Coole Hover-Effekte */
+}
+
+#quiz-inhalt .quiz-btn:hover {
+  background: #cc6d00; /* Etwas dunkler beim Drüberfahren */
+  box-shadow: 0 4px 12px rgba(238, 127, 0, 0.3); /* Leuchtender Schatten */
+  transform: translateY(-2px); /* Hebt den Button leicht an */
+}
+
+
+/* ================================== */
+/* NEU: BADGES FÜR SCHWIERIGKEIT     */
+/* ================================== */
+
+/* Container über der Frage */
+.quiz-header {
+  display: flex;
+  justify-content: flex-end; /* Badge nach rechts schieben */
+  margin-bottom: 10px;
+}
+
+/* Grund-Styling des Badges */
+.level-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Farbe für EINFACH (Grün) */
+.badge-einfach {
+  background-color: #4caf50; 
+}
+
+/* Farbe für SCHWER (Rot) */
+.badge-schwer {
+  background-color: #f44336;
+}
+
+/* Kleine Korrektur für den Abstand der Frage, wenn ein Badge vorhanden ist */
+.quiz-frage {
+  margin-top: 5px;
+  clear: both;
+}
