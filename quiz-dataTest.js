@@ -324,70 +324,52 @@
 },
 
 //==================================
-// SEMESTER 4
+// SEMESTER 4 - 
 //==================================
+
 'wba': {
-    titel: "Web-Grundlagen Check",
-    fragen: [
-      { 
-        frage: "Wofür steht HTML?",
-        optionen: ["HyperText Markup Language", "Home Tool Management Logic", "High Tech Multi Language"],
-        antwort: 0 // Die erste Option
-      },
-      { 
-        frage: "Welche Sprache wird für das Styling (Farben, Layout) einer Webseite verwendet?",
-        optionen: ["JavaScript", "HTML", "CSS (Cascading Style Sheets)"],
-        antwort: 2 
-      },
-      { 
-        frage: "Welche Sprache macht eine Webseite interaktiv (z.B. Klick-Events, Popups)?",
-        optionen: ["HTML", "JavaScript", "CSS"],
-        antwort: 1
-      }
-    ]
-    },
+  titel: "Check: Webentwicklung",
+  fragen: [
+    { frage: "Wofür steht die Abkürzung HTML?", optionen: ["Hypertext Markup Language", "High Tech Modern Language", "Hyperlink and Text Management"], antwort: 0, level: "einfach" },
+    { frage: "Welches HTML-Tag wird verwendet, um einen Zeilenumbruch einzufügen?", optionen: ["<lb>", "<break>", "<br>"], antwort: 2, level: "einfach" },
+    { frage: "Was macht die CSS-Eigenschaft 'color'?", optionen: ["Ändert die Hintergrundfarbe", "Ändert die Textfarbe", "Ändert die Rahmenfarbe"], antwort: 1, level: "einfach" },
+    { frage: "Was ist der Unterschied zwischen 'localStorage' und 'sessionStorage'?", optionen: ["LocalStorage speichert Daten dauerhaft, SessionStorage nur bis der Tab geschlossen wird", "SessionStorage ist schneller", "Es gibt keinen Unterschied"], antwort: 0, level: "schwer" },
+    { frage: "Was beschreibt das CSS 'Box-Modell'?", optionen: ["Die Anordnung von Bildern", "Die Schichtung von Content, Padding, Border und Margin", "Ein spezielles Layout-Framework"], antwort: 1, level: "schwer" }
+  ]
+},
+
+'wahl_wi': {
+  titel: "Check: WI-Vertiefung",
+  fragen: [
+    { frage: "Wofür steht 'SaaS' im Cloud-Computing?", optionen: ["Software as a Service", "System and Application Support", "Storage as a Solution"], antwort: 0, level: "einfach" },
+    { frage: "Was ist eine API?", optionen: ["Ein Antiviren-Programm", "Eine Schnittstelle zur Kommunikation zwischen Software", "Ein spezieller Datenbank-Typ"], antwort: 1, level: "einfach" },
+    { frage: "Was ist der Hauptvorteil von Cloud-Speicher?", optionen: ["Er ist immer kostenlos", "Zugriff von überall mit Internetverbindung", "Er braucht keinen Strom"], antwort: 1, level: "einfach" },
+    { frage: "Was bedeutet 'Vertical Scaling' bei Servern?", optionen: ["Mehr Server hinzufügen", "Die Ressourcen eines bestehenden Servers erhöhen (z.B. mehr RAM)", "Die Server in ein höheres Regal stellen"], antwort: 1, level: "schwer" },
+    { frage: "Was beschreibt 'Latenz' in einem Netzwerk?", optionen: ["Die maximale Datenmenge pro Sekunde", "Die Verzögerungszeit bei der Datenübertragung", "Die Sicherheit der Verbindung"], antwort: 1, level: "schwer" }
+  ]
+},
 
 'bi': {
   titel: "Check: Business Intelligence",
   fragen: [
-    { 
-      frage: "Was ist das Ziel von 'Business Intelligence' (BI)?",
-      optionen: ["Daten zu sammeln, um bessere Geschäftsentscheidungen zu treffen", "Konkurrenten auszuspionieren", "Nur schöne Diagramme zu malen"],
-      antwort: 0
-    },
-    { 
-      frage: "Was ist ein 'Dashboard'?",
-      optionen: ["Eine Datenbank", "Eine visuelle Aufbereitung von wichtigen Kennzahlen (KPIs) auf einen Blick", "Ein Server-Raum"],
-      antwort: 1
-    },
-    { 
-      frage: "Wofür steht 'ETL'?",
-      optionen: ["Easy-To-Learn", "Extract, Transform, Load (Der Prozess, Daten in ein Data Warehouse zu laden)", "Electronic-Transaction-List"],
-      antwort: 1
-    }
+    { frage: "Was ist ein KPI?", optionen: ["Key Performance Indicator (Leistungskennzahl)", "Keep People Informed", "Kern-Prozess-Index"], antwort: 0, level: "einfach" },
+    { frage: "Wo werden Daten für BI-Analysen meistens zentral gesammelt?", optionen: ["In einer Excel-Tabelle", "Im Data Warehouse", "In der Cloud-Ablage"], antwort: 1, level: "einfach" },
+    { frage: "Was ist das Ziel von 'Data Mining'?", optionen: ["Daten löschen", "Muster und Trends in großen Datenmengen finden", "Hardware reparieren"], antwort: 1, level: "einfach" },
+    { frage: "Was ist der Unterschied zwischen OLTP und OLAP?", optionen: ["OLTP ist für Transaktionen (operativ), OLAP für Analysen (BI)", "OLAP ist viel älter", "Es gibt keinen Unterschied"], antwort: 0, level: "schwer" },
+    { frage: "Was beschreibt ein 'Star-Schema' in einer Datenbank?", optionen: ["Ein Schema zur Bewertung von Mitarbeitern", "Eine Struktur mit einer zentralen Faktentabelle und mehreren Dimensionstabellen", "Ein Sicherheitskonzept"], antwort: 1, level: "schwer" }
   ]
 },
 
 'agl': {
-  titel: "Check: Agiles Projektmanagement",
+  titel: "Check: Agiles Management",
   fragen: [
-    { 
-      frage: "Was ist 'Scrum'?",
-      optionen: ["Ein starres Projektmanagement-Tool", "Ein Framework (Regelwerk) für agiles Arbeiten in 'Sprints'", "Ein Befehl in SQL"],
-      antwort: 1
-    },
-    { 
-      frage: "Welche Rolle gibt es in Scrum NICHT?",
-      optionen: ["Product Owner", "Scrum Master", "Klassischer Projektmanager (Chef)"],
-      antwort: 2
-    },
-    { 
-      frage: "Was ist ein 'Sprint'?",
-      optionen: ["Ein schnelles Meeting", "Ein kurzer, festgelegter Zeitraum (z.B. 2 Wochen), in dem ein fertiges Produkt-Teil entsteht", "Die Testphase"],
-      antwort: 1
-    }
+    { frage: "Wie nennt man den festen Zeitraum für eine Arbeitsphase in Scrum?", optionen: ["Etappe", "Sprint", "Deadline"], antwort: 1, level: "einfach" },
+    { frage: "Wer ist in Scrum dafür verantwortlich, das Product Backlog zu pflegen?", optionen: ["Scrum Master", "Entwickler-Team", "Product Owner"], antwort: 2, level: "einfach" },
+    { frage: "Was ist ein 'Daily Standup'?", optionen: ["Ein gemeinsames Frühstück", "Ein kurzes, tägliches Meeting zur Abstimmung im Team", "Ein Sport-Event"], antwort: 1, level: "einfach" },
+    { frage: "Was versteht man unter der 'Definition of Done' (DoD)?", optionen: ["Das Ende des Projekts", "Eine Checkliste mit Kriterien, wann eine Aufgabe wirklich fertig ist", "Der Feierabend"], antwort: 1, level: "schwer" },
+    { frage: "Was sind die 4 Grundwerte des 'Agilen Manifests'?", optionen: ["Geld, Macht, Ruhm, Erfolg", "Individuen & Interaktionen über Prozesse & Werkzeuge (und 3 weitere)", "Planung, Kontrolle, Hierarchie, Dokumentation"], antwort: 1, level: "schwer" }
   ]
-},
+}
 
 //==================================
 // SEMESTER 5
@@ -769,3 +751,4 @@
       error: "Für dieses Modul wurde noch kein Quiz erstellt."
     }
   };
+
