@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<style>
+    .code-box {
+      color: black;
+      padding: 10px;
+      border-radius: 8px;
+      font-family: "Courier New", monospace;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .code-box .blank {
+      background-color: transparent;
+      color: transparent;
+      font-weight: normal;
+      padding: 0 4px;
+      border-radius: 3px;
+      border: 1px solid black;
+    }
+    /* ads Node darstellen */
+    .linked-node {
+    display: flex;
+    align-items: center;
+    justify-content: center; 
+    margin-top: 40px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 10px;
+    }
+
+    .node {
+    padding: 20px 30px;
+    border: 2px solid #333;
+    border-radius: 8px;
+    margin-right: 15px;
+    text-align: center;
+    font-weight: bold;
+    background-color: #e8f0ff;
+    }
+    /* Bubblesort Animation */
+    .bubble-container{
+      width: 100%;
+      min-height: 0;
+      margin-top: 20px;
+    }
+    /* Objektdiagramm */
+
+    .diagramm-container {
+      display: flex;
+      align-items: center; 
+      gap: 40px;              
+      justify-content: center; 
+      margin: 20px 0;
+    }
+  
+    .diagramm {
+      border: 2px solid #000;
+      width: 200px;
+      text-align: left;
+      font-family: Arial, sans-serif;
+      margin: 20px auto;
+    }
+
+    .diagramm-header, .diagramm-footer {
+      background-color: #f0f0f0;
+      font-weight: bold;
+      padding: 5px;
+      text-align: center;
+    }
+
+    .diagramm-header {
+      border-bottom: 2px solid #000;
+    }
+
+    .diagramm-body {
+      padding: 10px;
+      border-bottom: 1px solid #000;
+    }
+
+    .diagramm-footer {
+      border-top: 2px solid #000;
+    }
+
+    .arrow {     
+      font-size: 24px;
+      margin-right: 0;
+      margin-left: -10px;   
+    }
+
+  </style>
+</head>
+<body>
+
+<div class="modultafel">
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">1</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Einführung in die Informatik</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Kannst du logisch denken?</p>
+            <button class="quiz-btn" onclick="openQuizModal('info1', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Objektorientierte Softwareentwicklung</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Programmierst du gerne Java?</p>
+            <button class="quiz-btn" onclick="openQuizModal('oose', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Einführung Wirtschaftsinformatik</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Interesse an Prozessen?</p>
+            <button class="quiz-btn" onclick="openQuizModal('einfWI', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 bwl" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Einführung BWL</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie funktioniert Geld?</p>
+            <button class="quiz-btn" onclick="openQuizModal('bwl', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 mathe" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Diskrete Strukturen</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Magst du Mengenlehre?</p>
+            <button class="quiz-btn" onclick="openQuizModal('ds', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">2</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-10 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Programmiermethoden</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Vom Bastler zum Software-Architekten?</p>
+            <button class="quiz-btn" onclick="openQuizModal('pmt', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Datenbanken</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Bringst du Ordnung ins Daten-Chaos</p>
+            <button class="quiz-btn" onclick="openQuizModal('db', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Geschäftsprozessmanagement</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie läuft der Laden effizienter?</p>
+            <button class="quiz-btn" onclick="openQuizModal('gpm', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 bwl" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Betriebliches Rechnungswesen</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Soll an Haben – wo ist das Geld?</p>
+            <button class="quiz-btn" onclick="openQuizModal('rewe', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 mathe" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Wirtschaftsmathematik</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>mal gucken ob du im Mathe Unterricht aufgepasst hast</p>
+            <button class="quiz-btn" onclick="openQuizModal('mathe', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 3. Semester  -->
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">3</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Algorithmen und Datenstrukturen</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie sucht und sortiert Google so schnell?</p>
+            <button class="quiz-btn" onclick="openQuizModal('ads', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Softwaretechnik</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie baut man Software im Team?</p>
+            <button class="quiz-btn" onclick="openQuizModal('swt', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Betriebliche Informationssysteme</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie steuert man einen riesigen Konzern?</p>
+            <button class="quiz-btn" onclick="openQuizModal('bis', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 bwl" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Innovationsmanagement</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Hast du die nächste große Idee?</p>
+            <button class="quiz-btn" onclick="openQuizModal('inno', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 mathe" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Statistik und Wahrscheinlichkeitsrechnung</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Zufall oder berechenbares Risiko?</p>
+            <button class="quiz-btn" onclick="openQuizModal('statistik', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">4</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Webentwicklung</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Baust du das nächste Instagram?</p>
+            <button class="quiz-btn" onclick="openQuizModal('wba', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Wahlmodul Wirtschaftsinformatik</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Vertiefe, was dich wirklich kickt!</p>
+            <button class="quiz-btn" onclick="openQuizModal('wi1', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Business Intelligence</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Machst du aus Daten pures Gold?</p>
+            <button class="quiz-btn" onclick="openQuizModal('bi', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 bwl" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Agiles Projektmanagement</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Scrum Master oder Chaos-Pilot?</p>
+            <button class="quiz-btn" onclick="openQuizModal('agl', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">5</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-5 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Cybersecurity</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Hacker-Angriff oder sichere Festung?</p>
+            <button class="quiz-btn" onclick="openQuizModal('cybersec', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Projekt Digitalisierung</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>Genug Theorie – jetzt wird umgesetzt!</p>
+            <button class="quiz-btn" onclick="openQuizModal('pdt', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Digitale Transformation</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Wie macht man Dinosaurier digital?</p>
+            <button class="quiz-btn" onclick="openQuizModal('dt', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 wiarbeiten" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Wissenschaftlcihes Arbeiten</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Forschen statt nur Googeln?</p>
+            <button class="quiz-btn" onclick="openQuizModal('wa', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-5 itrecht" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">IT-Recht und Datenschutz</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Ist das legal oder kann das weg?</p>
+            <button class="quiz-btn" onclick="openQuizModal('itr', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">6</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-30 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Berufspraktische Tätigkeit</div>
+            <div class="module-cp">30 cp</div>
+          </div>
+          <div class="back">
+            <p>Zeit für die Praxis?</p>
+            <button class="quiz-btn" onclick="openQuizModal('praxis', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+  <div class="semester-row">
+    <div class="semester-label">
+      <span class="sem-number">7</span>
+      <span class="cp-total">30 cp</span>
+    </div>
+
+    <div class="module-grid">
+      
+      <div class="card-container cp-5 international" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Wahlmodul Internationalisierung</div>
+            <div class="module-cp">5 cp</div>
+          </div>
+          <div class="back">
+            <p>Kannst du logisch denken?</p>
+            <button class="quiz-btn" onclick="openQuizModal('international', event)">
+               Quiz starten
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-10 informatik" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Portfolio Wirtschaftsinformatik</div>
+            <div class="module-cp">10 cp</div>
+          </div>
+          <div class="back">
+            <p>fast am ende?</p>
+            <button class="quiz-btn" onclick="openQuizModal('portfolio', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-container cp-15 wirtschaft" onclick="flipCard(this)">
+        <div class="card">
+          <div class="front">
+            <div class="module-name">Bachelor-Thesis</div>
+            <div class="module-cp">15 cp</div>
+          </div>
+          <div class="back">
+            <p>dein letztes Kunstwerk</p>
+            <button class="quiz-btn" onclick="openQuizModal('thesis', event)">
+  Quiz starten
+</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="quiz-modal">
+  
+  <div class="modal-content">
+    
+  	  	<span class="close-btn" onclick="closeQuizModal()">&times;</span>
+    
+  	  	<div id="quiz-inhalt">
+      
+      <h1>Willkommen bei deinem interaktiven Modulplan!</h1>
+      <h2>Starte das Quiz!</h2>
+      <p>Vor dir liegt die komplette Modultafel vom Studiengang Wirtschaftsinformatik. Aber statt nur zu lesen, kannst du hier aktiv werden:
+
+  <ul class="anleitung-liste">
+      <li>
+        <strong>1. Entdecken</strong>
+        <p>Klick auf ein beliebiges Modul, das dich interessiert.</p>
+      </li>
+      <li>
+        <strong>2. Quizzen</strong>
+        <p>Die Karte dreht sich um. Starte das Mini-Quiz!</p>
+      </li>
+      <li>
+        <strong>3. Entscheiden</strong>
+        <p>Finde heraus, ob das Fach wirklich zu dir passt.</p>
+      </li>
+    </ul>
+    
+    <button class="quiz-btn" onclick="closeQuizModal()">Alles klar, los geht's!</button>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script src="quiz.js"></script>
+
+</body>
+</html>
