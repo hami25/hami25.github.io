@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fragebogen</title>
+
+    <!-- CSS aus dem Ordner einbinden -->
+    <link rel="stylesheet" href="./css/style.css" media="all">
+    <link rel="stylesheet" href="./css/styles.css" media="all">
+    <link rel="stylesheet" href="./css/style_frage.css" media="all">
+
+<style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+    }
+
+    .scale-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .scale {
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+    }
+
+    .option.selected {
+      background: #4a90e2;
+    }
+
+    .labels {
+      display: flex;
+      justify-content: space-between;
+      width: 300px;
+      font-size: 0.9rem;
+    }
+
+    .button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .option {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background-color: #ccc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s;
+    }
+
+    .labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+    }
+
+    .page{
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* Button */
+    #submit-btn {
+      display: block;           
+      width: 600px;             
+      max-width: 600px;          
+      padding: 15px;
+      margin: 20px auto;        
+      border: none;
+      border-radius: 12px;
+      background-color: #f8f8f8;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);  
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    #submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .quiz-container {
+      max-width: 600px;
+      margin: 0 auto 30px auto;
+      padding: 15px;
+      border-radius: 12px;
+      background-color: #f8f8f8;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .quiz-container h1 {
+      text-align: center;
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    #submit-btn {
+      display: block;
+      width: 100%;
+      max-width: 600px;
+      padding: 15px;
+      margin: 20px auto;
+      border: none;
+      border-radius: 12px;
+      background-color: #f8f8f8;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    #submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+    }
+
+    .result-card {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .result-card h2 {
+      margin-bottom: 10px;
+    }
+
+    .result-card p {
+      font-size: 1rem;
+      color: #333;
+    }
+
+    #result {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 12px;
+      background-color: #f8f8f8;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .result-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .balken-container {
+      margin: 10px 0;
+      text-align: left;
+    }
+
+    .balken-label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    .balken {
+      width: 100%;
+      height: 25px;
+      background-color: #ddd;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .balken-fill {
+      height: 100%;
+      text-align: right;
+      padding-right: 5px;
+      color: white;
+      font-weight: bold;
+      line-height: 25px;
+      border-radius: 12px;
+    }
+
+    .balken-fill.highlight {
+      box-shadow: 0 0 8px rgba(0,0,0,0.4);
+      border: 2px solid #000;
+    }
+
+    .balken-bwl { background-color: #4a90e2; }
+    .balken-wi  { background-color: #50c878; }
+    .balken-ai  { background-color: #f5a623; }
+
+    .career-modal { display:none; position:fixed; inset:0; z-index:1000; }
+    .career-modal.is-open { display:block; }
+    .career-modal-backdrop { position:absolute; inset:0; background:rgba(0,0,0,0.55); }
+    .career-modal-dialog { position:relative; width:95%; max-width:700px; max-height:90vh; margin:auto; top:50%; transform:translateY(-50%); background:#fff; border-radius:16px; padding:2rem; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,0.3); }
+    .career-modal-close { position:absolute; top:1rem; right:1rem; font-size:1.5rem; background:transparent; cursor:pointer; }
+
+    .warning-text {
+    display: none;             
+    color: #d32f2f;
+    font-weight: 600;
+    margin-bottom: 10px;
+    text-align: center;
+    }
+
+  </style>
+</head>
+
+<body>
+  
+<div class="page">
+<div id="quiz"></div>
+<button id="submit-btn">Ergebnis anzeigen</button>
+<div id="warning" class="warning-text"></div>
+<div id="result" style="display:none;"></div>
+
+<!-- <script>
+
+const careerContent = document.getElementById('career-content');
+const linkBtn = document.createElement('button');
+linkBtn.type = 'button'; 
+
+const questions = [
+  { text: "Haben Sie Spaß am Programmieren?", points: {BWL:0, WI:2, AI:5} },
+  { text:"Interessieren Sie sich für wirtschaftliche Zusammenhänge?", points:{BWL:5, WI:2, AI:0} },
+  { text:"Möchten Sie später mit IT-Systemen arbeiten?", points:{BWL:0, WI:5, AI:5} },
+  { text:"Finden Sie Digitalisierung und die Verbindung von IT & Business spannend?", points:{BWL:0, WI:5, AI:2} },
+  { text:"Arbeiten Sie lieber an Konzepten und Geschäftsprozessen als an technischen Details?", points:{BWL:2, WI:5, AI:0} },
+  { text:"Können Sie sich vorstellen, viel mit Daten zu arbeiten?", points:{BWL:0, WI:5, AI:5} },
+  { text:"Sehen Sie sich später im Management oder in Bereichen wie Marketing oder Finance?", points:{BWL:5, WI:2, AI:0} },
+  { text:"Möchten Sie gerne an der Schnittstelle zwischen IT-Systemen und Unternehmen arbeiten?", points:{BWL:0, WI:5, AI:2} }
+];
+
+const quizContainer = document.getElementById("quiz");
+const scales = [];
+
+// Quiz erstellen
+questions.forEach((q) => {
+  const qDiv = document.createElement("div");
+  qDiv.classList.add("quiz-container");
+
+  const h1 = document.createElement("h1");
+  h1.textContent = q.text;
+  qDiv.appendChild(h1);
+
+  const scaleWrapper = document.createElement("div");
+  scaleWrapper.classList.add("scale-wrapper");
+
+  const scale = document.createElement("div");
+  scale.classList.add("scale");
+  scaleWrapper.appendChild(scale);
+
+  const labels = document.createElement("div");
+  labels.classList.add("labels");
+  labels.innerHTML = `<span>Stimme gar nicht zu</span><span>Stimme voll zu</span>`;
+  scaleWrapper.appendChild(labels);
+
+  qDiv.appendChild(scaleWrapper);
+  quizContainer.appendChild(qDiv);
+
+  // Optionen erstellen 1–5
+  for(let i=1; i<=5; i++){
+    const option = document.createElement("div");
+    option.classList.add("option");
+    option.dataset.value = i;
+    scale.appendChild(option);
+  }
+
+  // Auswahl speichern
+  let value = null;
+  const options = scale.querySelectorAll(".option");
+  options.forEach(opt => {
+    opt.addEventListener("click", () => {
+      options.forEach(o => o.classList.remove("selected"));
+      opt.classList.add("selected");
+      value = parseInt(opt.dataset.value); // Wert 1–5
+    });
+  });
+
+  scales.push(() => value);
+});
+
+document.getElementById("submit-btn").addEventListener("click", () => {
+  const resultContainer = document.getElementById("result");
+
+  // 버튼 숨기기
+  document.getElementById("submit-btn").style.display = "none";
+
+  // 결과 div 보이게
+  resultContainer.style.display = "block";
+
+  // 점수 계산
+  const scores = {BWL:0, WI:0, AI:0};
+
+  scales.forEach((getValue, i) => {
+    const val = getValue();
+    if (val === null) return;
+
+    const weight = val - 3; // -2 ~ +2
+    const p = questions[i].points;
+
+    scores.BWL += p.BWL * weight;
+    scores.WI  += p.WI  * weight;
+    scores.AI  += p.AI  * weight;
+  });
+
+  const maxScore = Math.max(...Object.values(scores));
+
+  const best = Object.keys(scores).find(fach => scores[fach] === maxScore);
+
+  // 결과 영역 초기화
+  resultContainer.innerHTML = `
+    <div class="result-title">Dein empfohlenes Fach 🎓: ${best}</div>
+    <p>Dieser Bereich passt gut zu deinen Interessen und Stärken.</p>
+  `;
+
+  // 막대 그래프 생성
+  Object.entries(scores).forEach(([fach, score]) => {
+    const barClass = {
+      BWL: "balken-bwl",
+      WI: "balken-wi",
+      AI: "balken-ai"
+    }[fach];
+
+    const barPercent = Math.min(100, (score / maxScore) * 100);
+
+    const highlightClass = (fach === best) ? " highlight" : "";
+
+    const barHTML = `
+      <div class="balken-container">
+        <div class="balken-label">${fach}</div>
+        <div class="balken">
+          <div class="balken-fill ${barClass}${highlightClass}" style="width:${barPercent}%"></div>
+        </div>
+         
+      </div>
+    `;
+
+    resultContainer.innerHTML += barHTML;
+  });
+
+
+  // 학과별 메시지
+let messageText='';
+let linkURL = '';
+switch(best){
+  case 'BWL':
+    messageText='Hier erfahren Sie mehr über BWL – schauen Sie sich die Details an!';
+    linkURL = 'https://www.hs-rm.de/wiesbaden-business-school';
+    break;
+  case 'WI':
+    messageText='Hier erfahren Sie mehr über Wirtschaftsinformatik – lernen Sie es besser kennen!';
+    break;
+  case 'AI':
+    messageText='Hier erfahren Sie mehr über AI – entdecken Sie spannende Inhalte!';
+    linkURL = 'https://www.hs-rm.de/design-informatik-medien/studiengaenge/bachelor/angewandte-informatik';
+    break;
+}
+
+const resultTextDiv = document.createElement('div');
+resultTextDiv.style.marginTop = '15px';
+resultTextDiv.style.fontSize = '1rem';
+resultTextDiv.style.fontWeight = '500';
+resultTextDiv.textContent = messageText;
+
+if (linkURL) {
+  const link = document.createElement('a');
+  link.href = linkURL;
+  link.target = '_blank';
+  link.textContent = 'Zur Webseite';
+
+  link.style.display = 'inline-block';
+  link.style.marginLeft = '8px';
+  link.style.padding = '6px 12px';
+  link.style.borderRadius = '8px';
+  link.style.background = '#4a90e2';
+  link.style.color = '#fff';
+  link.style.textDecoration = 'none';
+  link.style.fontWeight = '600';
+  link.style.cursor = 'pointer';
+
+  link.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open(linkURL, '_self'); // 현재 탭에서 이동
+});
+
+  resultTextDiv.textContent = messageText + ' ';
+  resultTextDiv.appendChild(link);
+}
+
+resultContainer.appendChild(resultTextDiv);
+  
+});
+</script> -->
+
+<!-- <script>
+// ===== helper =====
+function weight(val) {
+  // 1~5 → -1 ~ +1 (중립 3 = 0)
+  return (val - 3) / 2;
+}
+
+// ===== data =====
+// const questions = [
+//   { text:"Haben Sie Spaß am Programmieren? und an technischen Herausforderungen?", points: {BWL:0, WI:2, AI:5} },
+//   { text:"Interessieren Sie sich für wirtschaftliche Zusammenhänge?", points:{BWL:5, WI:2, AI:0} },
+//   { text:"Möchten Sie später mit IT-Systemen arbeiten und Projekte planen?", points:{BWL:2, WI:5, AI:5} },
+//   { text:"Finden Sie Digitalisierung und die Verbindung von IT & Business spannend?", points:{BWL:2, WI:5, AI:2} },
+//   { text:"Arbeiten Sie lieber an Konzepten und Geschäftsprozessen als an technischen Details?", points:{BWL:5, WI:2, AI:0} },
+//   { text:"Können Sie sich vorstellen, viel mit Daten zu arbeiten?", points:{BWL:0, WI:5, AI:5} },
+//   { text:"Sehen Sie sich später im Management oder in Bereichen wie Marketing oder Finance?", points:{BWL:5, WI:2, AI:0} },
+//   { text:"Möchten Sie gerne an der Schnittstelle zwischen IT-Systemen und Unternehmen arbeiten?", points:{BWL:2, WI:5, AI:2} },
+//   { text: "Interessieren Sie sich für Marketing, Vertrieb oder Finanzthemen mehr als für Programmierung?", points: { BWL:5, WI:2, AI:0} },
+//   { text: "Möchten Sie später wirtschaftliche Prozesse optimieren und Entscheidungen vorbereiten?", points: { BWL:5, WI:2, AI:0 } },
+
+// ];
+
+const questions = [
+  { text: "Haben Sie Spaß am Programmieren und an technischen Herausforderungen?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Interessieren Sie sich für wirtschaftliche Zusammenhänge und Unternehmensstrategien?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Möchten Sie später mit IT-Systemen arbeiten und Projekte planen?", points: { BWL:2, WI:5, AI:5 } },
+  { text: "Finden Sie die Verbindung von IT und Wirtschaft spannend?", points: { BWL:2, WI:5, AI:2 } },
+  { text: "Arbeiten Sie gerne an Konzepten, Prozessen oder im Management?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Können Sie sich vorstellen, Daten zu analysieren und daraus Lösungen abzuleiten?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Interessieren Sie sich für Marketing, Vertrieb oder Finanzthemen?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Möchten Sie an der Schnittstelle zwischen IT-Systemen und Unternehmen arbeiten?", points: { BWL:2, WI:5, AI:2 } },
+  { text: "Arbeiten Sie gerne mit Algorithmen, Logik oder künstlicher Intelligenz?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Möchten Sie wirtschaftliche Prozesse optimieren und IT-Systeme dabei einsetzen?", points: { BWL:3, WI:5, AI:0 } },
+];
+
+
+// ===== quiz build =====
+const quizContainer = document.getElementById("quiz");
+const scales = [];
+
+questions.forEach((q) => {
+  const qDiv = document.createElement("div");
+  qDiv.className = "quiz-container";
+
+  const h1 = document.createElement("h1");
+  h1.textContent = q.text;
+  qDiv.appendChild(h1);
+
+  const scaleWrapper = document.createElement("div");
+  scaleWrapper.className = "scale-wrapper";
+
+  const scale = document.createElement("div");
+  scale.className = "scale";
+
+  const labels = document.createElement("div");
+  labels.className = "labels";
+  labels.innerHTML = `<span>Stimme gar nicht zu</span><span>Stimme voll zu</span>`;
+
+  scaleWrapper.appendChild(scale);
+  scaleWrapper.appendChild(labels);
+  qDiv.appendChild(scaleWrapper);
+  quizContainer.appendChild(qDiv);
+
+  let value = null;
+
+  for (let i = 1; i <= 5; i++) {
+    const opt = document.createElement("div");
+    opt.className = "option";
+    opt.dataset.value = i;
+
+    opt.addEventListener("click", () => {
+      scale.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+      opt.classList.add("selected");
+      value = i;
+    });
+
+    scale.appendChild(opt);
+  }
+
+  scales.push(() => value);
+});
+
+// ===== submit =====
+document.getElementById("submit-btn").addEventListener("click", () => {
+  const resultContainer = document.getElementById("result");
+  document.getElementById("submit-btn").style.display = "none";
+  resultContainer.style.display = "block";
+  resultContainer.innerHTML = "";
+
+  // score calc
+  const scores = { BWL: 0, WI: 0, AI: 0 };
+
+  scales.forEach((getValue, i) => {
+    const val = getValue();
+    if (val === null) return;
+
+    const w = weight(val);
+    const p = questions[i].points;
+
+    scores.BWL += p.BWL * w;
+    scores.WI  += p.WI  * w;
+    scores.AI  += p.AI  * w;
+  });
+
+  // maxScore for normalization (weight 기준)
+  const maxScore = questions.reduce((sum, q) => {
+    return sum + Math.max(q.points.BWL, q.points.WI, q.points.AI);
+  }, 0) || 1;
+
+  // best fach
+  const best = Object.keys(scores).reduce((a, b) =>
+    scores[a] > scores[b] ? a : b
+  );
+
+  // title
+  const title = document.createElement("div");
+  title.className = "result-title";
+  title.textContent = `Dein empfohlenes Fach 🎓: ${best}`;
+  resultContainer.appendChild(title);
+
+  // bars
+  Object.entries(scores).forEach(([fach, score]) => {
+    const barClass = {
+      BWL: "balken-bwl",
+      WI: "balken-wi",
+      AI: "balken-ai"
+    }[fach];
+
+    const percent = Math.round((Math.abs(score) / maxScore) * 100);
+
+    const container = document.createElement("div");
+    container.className = "balken-container";
+
+    const label = document.createElement("div");
+    label.className = "balken-label";
+    label.textContent = fach;
+
+    const bar = document.createElement("div");
+    bar.className = "balken";
+
+    const fill = document.createElement("div");
+    fill.className = `balken-fill ${barClass}`;
+    if (fach === best) fill.classList.add("highlight");
+    fill.style.width = percent + "%";
+    fill.textContent = percent + "%";
+
+    bar.appendChild(fill);
+    container.appendChild(label);
+    container.appendChild(bar);
+    resultContainer.appendChild(container);
+  });
+
+  // message + link
+  let messageText = "";
+  let linkURL = "";
+
+  if (best === "BWL") {
+    messageText = "Hier erfahren Sie mehr über BWL – schauen Sie sich die Details an!";
+    linkURL = "https://www.hs-rm.de/wiesbaden-business-school";
+  } else if (best === "WI") {
+    messageText = "Hier erfahren Sie mehr über Wirtschaftsinformatik – lernen Sie es besser kennen!";
+  } else if (best === "AI") {
+    messageText = "Hier erfahren Sie mehr über AI – entdecken Sie spannende Inhalte!";
+    linkURL = "https://www.hs-rm.de/design-informatik-medien/studiengaenge/bachelor/angewandte-informatik";
+  }
+
+  const textDiv = document.createElement("div");
+  textDiv.style.marginTop = "15px";
+  textDiv.textContent = messageText;
+
+  if (linkURL) {
+    const a = document.createElement("a");
+    a.href = linkURL;
+    a.textContent = " Zur Webseite";
+    a.style.marginLeft = "8px";
+    a.style.fontWeight = "600";
+    textDiv.appendChild(a);
+  }
+
+  resultContainer.appendChild(textDiv);
+});
+</script> -->
+
+
+<script>
+// ===== helper =====
+function weight(val) {
+  // 1~5 → -1 ~ +1 
+  return (val - 3) / 2;
+}
+
+// ===== data =====
+const questions = [
+  { text: "Haben Sie Spaß am Programmieren und an technischen Herausforderungen?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Interessieren Sie sich für wirtschaftliche Zusammenhänge und Unternehmensstrategien?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Möchten Sie später mit IT-Systemen arbeiten und Projekte planen?", points: { BWL:2, WI:5, AI:5 } },
+  { text: "Finden Sie die Verbindung von IT und Wirtschaft spannend?", points: { BWL:2, WI:5, AI:2 } },
+  { text: "Arbeiten Sie gerne an Konzepten, Prozessen oder im Management?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Können Sie sich vorstellen, Daten zu analysieren und daraus Lösungen abzuleiten?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Interessieren Sie sich für Marketing, Vertrieb oder Finanzthemen?", points: { BWL:5, WI:2, AI:0 } },
+  { text: "Möchten Sie an der Schnittstelle zwischen IT-Systemen und Unternehmen arbeiten?", points: { BWL:2, WI:5, AI:2 } },
+  { text: "Arbeiten Sie gerne mit Algorithmen, Logik oder künstlicher Intelligenz?", points: { BWL:0, WI:2, AI:5 } },
+  { text: "Möchten Sie wirtschaftliche Prozesse optimieren und IT-Systeme dabei einsetzen?", points: { BWL:3, WI:5, AI:0 } },
+];
+
+// ===== quiz build =====
+const quizContainer = document.getElementById("quiz");
+const scales = [];
+
+questions.forEach((q) => {
+  const qDiv = document.createElement("div");
+  qDiv.classList.add("quiz-container");
+
+  const h1 = document.createElement("h1");
+  h1.textContent = q.text;
+  qDiv.appendChild(h1);
+
+  const scaleWrapper = document.createElement("div");
+  scaleWrapper.classList.add("scale-wrapper");
+
+  const scale = document.createElement("div");
+  scale.classList.add("scale");
+  scaleWrapper.appendChild(scale);
+
+  const labels = document.createElement("div");
+  labels.classList.add("labels");
+  labels.innerHTML = `<span>Stimme gar nicht zu</span><span>Stimme voll zu</span>`;
+  scaleWrapper.appendChild(labels);
+
+  qDiv.appendChild(scaleWrapper);
+  quizContainer.appendChild(qDiv);
+
+ 
+  let value = null;
+  for(let i=1; i<=5; i++){
+    const option = document.createElement("div");
+    option.classList.add("option");
+    option.dataset.value = i;
+    scale.appendChild(option);
+
+    option.addEventListener("click", () => {
+      scale.querySelectorAll(".option").forEach(o => o.classList.remove("selected"));
+      option.classList.add("selected");
+      value = parseInt(option.dataset.value);
+
+      checkAllAnswered(); 
+    });
+  }
+
+  
+  scales.push(() => value);
+});
+
+
+function checkAllAnswered(){
+  return scales.every(fn => fn() !== null);
+}
+
+const warning = document.getElementById("warning");
+const submitBtn = document.getElementById("submit-btn");
+
+// ===== submit =====
+document.getElementById("submit-btn").addEventListener("click", () => {
+
+
+if (!checkAllAnswered()) {
+    warning.textContent =
+      "⚠️ Bitte beantworten Sie alle Fragen, bevor Sie das Ergebnis anzeigen.";
+    warning.style.display = "block"; 
+    return;
+  }
+
+  warning.style.display = "none";
+  warning.textContent = "";
+
+  const resultContainer = document.getElementById("result");
+  document.getElementById("submit-btn").style.display = "none";
+  resultContainer.style.display = "block";
+  resultContainer.innerHTML = "";
+
+  
+  const scores = { BWL: 0, WI: 0, AI: 0 };
+
+  scales.forEach((getValue, i) => {
+    const val = getValue();
+    if (val === null) return;
+
+    const w = weight(val);
+    const p = questions[i].points;
+
+
+    scores.BWL += Math.max(0, p.BWL * w);
+    scores.WI  += Math.max(0, p.WI  * w);
+    scores.AI  += Math.max(0, p.AI  * w);
+
+  });
+
+ 
+  const maxBWL = questions.reduce((sum, q) => sum + q.points.BWL, 0) || 1;
+  const maxWI  = questions.reduce((sum, q) => sum + q.points.WI, 0) || 1;
+  const maxAI  = questions.reduce((sum, q) => sum + q.points.AI, 0) || 1;
+
+  
+  const BWL_percent = (scores.BWL / maxBWL) * 100;
+  const WI_percent  = (scores.WI / maxWI) * 100;
+  const AI_percent  = (scores.AI / maxAI) * 100;
+
+  
+  const maxPercent = Math.max(BWL_percent, WI_percent, AI_percent);
+  let best;
+  if(maxPercent === WI_percent) best = "WI";
+  else if(maxPercent === BWL_percent) best = "BWL";
+  else best = "AI";
+
+  
+  const title = document.createElement("div");
+  title.className = "result-title";
+  title.textContent = `Dein empfohlenes Fach 🎓: ${best}`;
+  resultContainer.appendChild(title);
+
+  
+  Object.entries(scores).forEach(([fach, score]) => {
+    const barClass = { BWL:"balken-bwl", WI:"balken-wi", AI:"balken-ai" }[fach];
+    const max = { BWL:maxBWL, WI:maxWI, AI:maxAI }[fach];
+    const percent = Math.round((Math.abs(score)/max)*100);
+
+    const container = document.createElement("div");
+    container.className = "balken-container";
+
+    const label = document.createElement("div");
+    label.className = "balken-label";
+    label.textContent = fach;
+
+    const bar = document.createElement("div");
+    bar.className = "balken";
+
+    const fill = document.createElement("div");
+    fill.className = `balken-fill ${barClass}`;
+    if(fach === best) fill.classList.add("highlight");
+    fill.style.width = percent + "%";
+    fill.textContent = percent + "%";
+
+    bar.appendChild(fill);
+    container.appendChild(label);
+    container.appendChild(bar);
+    resultContainer.appendChild(container);
+  });
+
+  let messageText = "";
+  let linkURL = "";
+  const allZero = (scores.BWL === 0 && scores.WI === 0 && scores.AI === 0);
+
+
+
+if (best === "BWL") {
+    messageText = "Hier erfahren Sie mehr über BWL – schauen Sie sich die Details an!";
+    linkURL = "https://www.hs-rm.de/wiesbaden-business-school";
+} else if (best === "WI") {
+    if (allZero) {
+        
+        messageText = "Sie wissen noch nicht, welcher Studiengang zu Ihnen passt? Wie wäre es mit WI? Hier erfahren Sie mehr!";
+    } else {
+        
+        messageText = "Hier erfahren Sie mehr über Wirtschaftsinformatik – lernen Sie es besser kennen!";
+    }
+} else if (best === "AI") {
+    messageText = "Hier erfahren Sie mehr über AI – entdecken Sie spannende Inhalte!";
+    linkURL = "https://www.hs-rm.de/design-informatik-medien/studiengaenge/bachelor/angewandte-informatik";
+}
+
+const resultTextDiv = document.createElement('div');
+resultTextDiv.style.marginTop = '15px';
+resultTextDiv.style.fontSize = '1rem';
+resultTextDiv.style.fontWeight = '500';
+resultTextDiv.textContent = messageText;
+
+if (linkURL) {
+  const link = document.createElement('a');
+  link.href = linkURL;
+  link.target = '_blank';
+  link.textContent = 'Zur Webseite';
+
+  link.style.display = 'inline-block';
+  link.style.marginTop = '12px'
+  link.style.marginLeft = '8px';
+  link.style.padding = '10px 16px';
+  link.style.borderRadius = '8px';
+  link.style.background = '#4a90e2';
+  link.style.color = '#fff';
+  link.style.textDecoration = 'none';
+  link.style.fontWeight = '600';
+  link.style.cursor = 'pointer';
+
+  link.addEventListener('click', (e) => {
+  e.preventDefault();
+  window.open(linkURL, '_self'); 
+});
+
+  resultTextDiv.textContent = messageText + ' ';
+  resultTextDiv.appendChild(link);
+}
+
+resultContainer.appendChild(resultTextDiv);
+
+});
+</script>
+
+
+</body>
+</html>
