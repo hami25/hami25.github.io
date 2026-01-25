@@ -1,0 +1,513 @@
+/* ==========================================================================
+   Mini-Quiz (Launcher + Modal)
+
+   Zweck:
+   - Start-Button (Launcher) öffnet ein Modal mit Quiz-Schritten
+   - Modal besteht aus: .wi-quiz-modal (Overlay) + .wi-quiz-backdrop + .wi-quiz-dialog
+
+   JS/HTML-Vertrag:
+   - Öffnen/Schließen über Klasse: .wi-quiz-modal.is-open
+   - Backdrop: .wi-quiz-backdrop (kann im JS Klick = schließen)
+   - Dialog: .wi-quiz-dialog
+   ========================================================================== */
+
+/* =========================
+   LAUNCHER
+   ========================= */
+
+/* Wrapper für den Start-Button */
+.wi-quiz-launcher{
+  margin: 3rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* Großer Start-Button */
+.wi-quiz-start-btn{
+  padding: 1rem 2.8rem;
+  border-radius: 999px;
+  border: none;
+
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+
+  cursor: pointer;
+
+  /* Look: unverändert */
+  background: linear-gradient(90deg, #f4c289, #8dd3ce);
+  color: #fff;
+
+  box-shadow: 0 8px 18px rgba(0,0,0,.18);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+
+.wi-quiz-start-btn:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 12px 26px rgba(0,0,0,.22);
+  filter: brightness(1.05);
+}
+
+
+/* =========================
+   MODAL OVERLAY
+   ========================= */
+
+.wi-quiz-modal{
+  position: fixed;
+  inset: 0;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 9999;
+}
+
+.wi-quiz-modal.is-open{
+  display: flex;
+}
+
+/* Backdrop (Verdunkelung)*/
+.wi-quiz-backdrop{
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.55); /* (Theme/Glass Variante) */
+}
+
+
+/* =========================
+   DIALOG (Basis + Theme/Glass)
+   ========================= */
+
+.wi-quiz-dialog{
+  position: relative;
+  max-width: 650px;
+  width: 100%;
+  margin: 1rem;
+
+  /* Theme/Glass Look (statt weiß) */
+  background: var(--panel-strong);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  border-radius: 14px;
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  z-index: 1;
+}
+
+/* Inhalt im Dialog */
+.wi-quiz-inner{
+  padding: 1.5rem 1.8rem 1.6rem;
+}
+
+.wi-quiz-inner h3{
+  margin-top: 0;
+  margin-bottom: .4rem;
+}
+
+.wi-quiz-intro{
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-size: .9rem;
+
+  /* Theme Text */
+  color: var(--muted);
+}
+
+
+/* =========================
+   CLOSE BUTTON
+   ========================= */
+
+.wi-quiz-close{
+  position: absolute;
+  top: .6rem;
+  right: .8rem;
+
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: var(--shadow);
+  cursor: pointer;
+
+  font-size: 1.4rem;
+  line-height: 1;
+
+  transition: transform .16s ease, filter .16s ease;
+}
+
+.wi-quiz-close:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   QUIZ STEP / FORM
+   ========================= */
+
+.wi-quiz-question{
+  font-weight: 600;
+  margin-bottom: .5rem;
+}
+
+.wi-quiz-question + label{
+  margin-top: .2rem;
+}
+
+.wi-quiz-step label{
+  display: block;
+  font-size: .9rem;
+  margin-bottom: .25rem;
+  cursor: pointer;
+}
+
+.wi-quiz-step input[type="radio"]{
+  margin-right: .35rem;
+}
+
+
+/* =========================
+   NAVIGATION (Buttons)
+   ========================= */
+
+.wi-quiz-nav{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: .5rem;
+}
+
+.wi-quiz-nav-btn{
+  flex: 1;
+  padding: .55rem .8rem;
+
+  border-radius: 999px;
+  border: 1px solid #ccc;
+
+  background: #f5f5f5;
+  cursor: pointer;
+  font-size: .9rem;
+}
+
+
+/* ==========================================================================
+   Skalen-MiniQuiz (BWL/WI/AI) – wird in #wi-scale-quiz-root gerendert
+   ========================================================================== */
+
+.wi-scale-warning{
+  margin: 0 0 1rem;
+  padding: .8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: rgba(200, 16, 46, 0.10);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.wi-scale-quiz{
+  display: grid;
+  gap: .9rem;
+}
+
+.wi-scale-card{
+  padding: 1rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  box-shadow: var(--shadow);
+}
+
+.wi-scale-question{
+  margin: 0 0 .6rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.wi-scale-wrapper{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .45rem;
+}
+
+.wi-scale{
+  display: flex;
+  justify-content: space-between;
+  width: min(360px, 100%);
+  gap: .5rem;
+}
+
+.wi-scale-option{
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel-soft);
+  cursor: pointer;
+  transition: transform .12s ease, filter .12s ease, background .12s ease;
+}
+
+.wi-scale-option:hover{
+  filter: brightness(1.06);
+  transform: translateY(-1px);
+}
+
+.wi-scale-option.is-selected{
+  background: var(--accent);
+  border-color: rgba(0,0,0,0);
+  box-shadow: 0 0 0 3px rgba(141, 211, 206, 0.20);
+}
+
+html[data-theme="light"] .wi-scale-option.is-selected{
+  box-shadow: 0 0 0 3px rgba(11, 90, 166, 0.18);
+}
+
+.wi-scale-labels{
+  width: min(360px, 100%);
+  display: flex;
+  justify-content: space-between;
+  font-size: .85rem;
+  color: var(--muted);
+}
+
+.wi-scale-actions{
+  display: flex;
+  gap: .6rem;
+  margin-top: 1rem;
+}
+
+.wi-scale-submit,
+.wi-scale-reset{
+  flex: 1;
+  padding: .75rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .14s ease, filter .14s ease;
+}
+
+.wi-scale-submit:hover,
+.wi-scale-reset:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+.wi-scale-result{
+  margin-top: 1rem;
+  padding: 1rem 1rem;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+}
+
+.wi-scale-result-title{
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0 0 .8rem;
+}
+
+.wi-scale-bars{
+  display: grid;
+  gap: .75rem;
+}
+
+.wi-scale-bar-row{
+  display: grid;
+  gap: .35rem;
+}
+
+.wi-scale-bar-label{
+  font-weight: 700;
+}
+
+.wi-scale-bar{
+  width: 100%;
+  height: 26px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.10);
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+html[data-theme="light"] .wi-scale-bar{
+  background: rgba(15, 23, 42, 0.08);
+}
+
+.wi-scale-bar-fill{
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 8px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+}
+
+.wi-scale-bar-fill.is-best{
+  box-shadow: 0 0 0 2px rgba(0,0,0,0.35) inset;
+}
+
+.wi-scale-message{
+  margin-top: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.wi-scale-link{
+  display: inline-block;
+  margin-left: .4rem;
+  padding: .55rem .9rem;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #fff;
+  text-decoration: none;
+  font-weight: 800;
+  border: 1px solid rgba(0,0,0,0);
+  box-shadow: var(--shadow);
+}
+
+.wi-scale-link:hover{
+  filter: brightness(1.06);
+}
+
+.wi-quiz-nav-btn[disabled]{
+  opacity: .4;
+  cursor: default;
+}
+
+.wi-quiz-nav-btn-primary{
+  background: #8dd3ce;
+  border-color: #8dd3ce;
+  color: #fff;
+  font-weight: 600;
+}
+
+
+
+
+/* =========================
+   RESULT BOX
+   ========================= */
+
+.wi-quiz-result{
+  margin-top: 1.3rem;
+  padding: .9rem 1.1rem;
+  border-radius: 10px;
+  background: #f5f5f5;
+  font-size: .95rem;
+}
+
+
+/* =========================
+   PROJEKTSPEZIFISCHE POSITIONIERUNG
+   ========================= */
+
+/* Hinweis:
+   Dieser Block positioniert den Dialog “über dem Curriculum” mit festen Offsets.
+   Er ist layout-abhängig (Viewport-Breite, max Layout width, Sidebar-Breite).
+   Wenn sich das Grid/Layout ändert, muss dieser Wert ggf. angepasst werden. */
+
+/* Wrapper: links starten statt viewport-center */
+.wi-quiz-modal.is-open{
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Dialog selbst positionieren */
+.wi-quiz-modal.is-open .wi-quiz-dialog{
+  position: relative;
+
+  /* weiter nach unten */
+  margin-top: 8vh;
+
+  /* kein künstliches Hochziehen */
+  transform: none;
+
+  /* horizontale Projektposition bleibt */
+  left: calc((100vw - min(2200px, 100vw)) / 2 + 400px);
+
+  /* Sicherheit: Dialog nie höher als Viewport */
+  max-height: calc(100vh - 12vh);
+  overflow-y: auto;
+}
+
+/* =========================
+  MOBILE: alle Modals sauber zentrieren
+  ========================= */
+
+@media (max-width: 720px){
+  .wi-quiz-modal.is-open{
+    justify-content: center;
+    align-items: center;
+  }
+
+  .wi-quiz-modal.is-open .wi-quiz-dialog{
+    left: auto !important;
+    top: auto !important;
+    transform: none !important;
+    width: calc(100% - 2rem) !important;
+    margin: 1rem !important;
+    max-height: calc(100vh - 2rem) !important;
+    overflow: auto;
+  }
+
+
+  /* Zuordnung: 2 Spalten -> 1 Spalte */
+  .ds-zuordnung{
+    display: block;
+  }
+
+  .ds-zuordnung-left,
+  .ds-zuordnung-right{
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Zeilen: Begriff + Dropzone untereinander */
+  .ds-zuordnung-row{
+    display: block;
+    margin-bottom: .75rem;
+  }
+
+  .ds-zuordnung-begriff{
+    margin-bottom: .4rem;
+  }
+
+  /* Dropzones sollen nicht raus schieben */
+  .ds-dropzone{
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+  }
+
+  .s3-dd{
+    display: block;
+  }
+
+  .s3-dropzone,
+  .s3-chiptray{
+    width: 100%;
+    box-sizing: border-box;
+  }
+}

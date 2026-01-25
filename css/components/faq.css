@@ -1,0 +1,166 @@
+/* ==========================================================================
+   FAQ – Modal Only
+
+   Zweck:
+   - FAQ im Modal als Accordion (<details>/<summary>)
+   - Optional: Kategorie-Navigation + Sections
+
+   Struktur/HTML-Vertrag:
+   - Modal-Kontext: #faq-modal
+   - Accordion: details.faq-acc > summary + .faq-acc-body
+   ========================================================================== */
+
+
+/* =========================
+   ACCORDION (Modal, <details>)
+   ========================= */
+
+#faq-modal .faq-accordion{
+  color: var(--text);
+}
+
+/* Liste im Modal: spacing über gap  */
+#faq-modal .faq-acc-list{
+  margin-top: 1.2rem;
+  display: grid;
+}
+
+/* Einzelnes Accordion-Item */
+#faq-modal details.faq-acc{
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+
+  overflow: hidden;
+  transition: background 0.18s ease, box-shadow 0.18s ease;
+  margin-bottom: 14px;
+}
+
+#faq-modal details.faq-acc:hover{
+  background: var(--panel);
+}
+
+/* Header  */
+#faq-modal details.faq-acc > summary{
+  list-style: none;
+  cursor: pointer;
+
+  padding: 1rem 1.1rem;
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--text);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Standard-Dreieck entfernen (Chrome/Safari) */
+#faq-modal details.faq-acc > summary::-webkit-details-marker{
+  display: none;
+}
+
+/* Custom Chevron */
+#faq-modal details.faq-acc > summary::after{
+  content: "▾";
+  font-size: 1.1rem;
+  opacity: 0.75;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* geöffnet */
+#faq-modal details.faq-acc[open] > summary::after{
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
+/* Fokus (Tastatur) */
+#faq-modal details.faq-acc > summary:focus-visible{
+  outline: 2px solid rgba(141, 211, 206, 0.6);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* Antwort-Body */
+#faq-modal .faq-acc-body{
+  padding: 0.2rem 1.1rem 1.1rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+#faq-modal .faq-acc-body p{
+  margin: 0.6rem 0 0;
+}
+
+/* Link im Body */
+#faq-modal .faq-acc-link a{
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+#faq-modal .faq-acc-link a:hover{
+  text-decoration: underline;
+}
+
+/* Optional: geöffnetes Item etwas stärker */
+#faq-modal details.faq-acc[open]{
+  box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+
+
+/* =========================
+   Kategorie-Navigation (Modal)
+   ========================= */
+
+.faq-catnav{
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin: .75rem 0 1rem;
+}
+
+.faq-catbtn{
+  border: 1px solid var(--border);
+  background: var(--panel-soft);
+  color: var(--text);
+
+  padding: .45rem .7rem;
+  border-radius: 999px;
+
+  cursor: pointer;
+  font-size: .92rem;
+
+  transition: transform .08s ease, background .15s ease, border-color .15s ease;
+}
+
+.faq-catbtn:hover{
+  transform: translateY(-1px);
+}
+
+.faq-catbtn.is-active{
+  border-color: rgba(141, 211, 206, .55);
+  background: rgba(141, 211, 206, .14);
+}
+
+
+/* Sections klar trennen */
+.faq-section{
+  margin: 1.2rem 0 1.6rem;
+  padding-top: .8rem;
+  border-top: 1px solid var(--border);
+}
+
+.faq-section-title{
+  margin: 0 0 .25rem;
+  font-size: 1.05rem;
+}
+
+.faq-section-intro{
+  margin: 0 0 .8rem;
+  opacity: .85;
+  font-size: .92rem;
+}

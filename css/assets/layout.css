@@ -1,0 +1,55 @@
+/*
+  Nur Layout-Styles.
+  Geltungsbereich:
+  - Container & Seitenlayout (keine Komponenten-Optik)
+  - Breakpoints für strukturelle Änderungen
+*/
+
+/* ===== Container ===== */
+.container{
+  width: min(var(--container), calc(100% - 2rem));
+  margin-inline: auto;
+}
+
+/* ===== Page layout: Main + Sidebar ===== */
+.curriculum-layout{
+  max-width: 2200px;
+  margin: 0 auto 3rem;
+  padding: 0 1.5rem;
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* linker-Bereich */
+.curriculum-layout .curriculum{ flex: 4; }
+
+/* rechter-Bereich */
+.curriculum-layout .curriculum-facts{
+  flex: 2;
+  position: relative;
+  z-index: 0;
+}
+
+.curriculum{
+  position: relative;
+}
+
+/* Responsiv: Stapeln
+   - Wechsel von 2 Spalten (Hauptbereich + Sidebar) zu 1 Spalte unter 980px
+*/
+
+@media (max-width: 1400px){
+  .curriculum-layout{
+    display: block;
+    padding: 0 1rem;
+  }
+}
+
+
+@media (max-width: 980px){
+  .curriculum-layout{
+    display: block;
+    padding: 0 1rem;
+  }
+}

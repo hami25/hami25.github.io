@@ -1,0 +1,25 @@
+/*
+  CSS-Einstiegspunkt.
+  Import-Reihenfolge ist absichtlich: Foundation → Komponenten.
+  Hinweis: Aktuell sind relative (./) und absolute (/css/...) Pfade gemischt;
+  bitte konsistent halten (abhängig von Build/Deployment).
+*/
+
+/* ===== Foundation ===== */
+/*@import "./base.css";
+@import "./layout.css";*/
+@import "/css/assets/base.css";
+@import "/css/assets/layout.css";
+
+/* ===== Komponenten ===== */
+@import "/css/components/tabs.css";
+@import "/css/components/filters.css";
+@import "/css/components/curriculum.css";
+@import "/css/components/sidebar.css";
+@import "/css/components/dialog.css";
+@import "/css/components/quiz.css";
+@import "/css/components/faq.css";
+@import "/css/components/video.css";
+@import "/css/components/swipe.css";
+@import "/css/components/theme-toggle.css";
+@import "/css/components/chatbot.css";

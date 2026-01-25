@@ -1,0 +1,118 @@
+/* ==========================================================================
+   video.css – Video Modal
+
+   Zweck:
+   - Vollbild-Overlay (Backdrop) + zentrierter Dialog für Video (iframe/video)
+   - Close-Button im Dialog
+
+   JS/HTML-Vertrag (empfohlen):
+   - .video-modal ist der Overlay-Container
+   - .video-modal-content ist der Dialog
+   - Öffnen/Schließen durch Klasse: .video-modal.is-open
+     (Alternative: [hidden] oder aria-hidden – je nach Setup)
+   - Optional: Klick auf Overlay schließt, Klick im Dialog nicht.
+
+   Accessibility Hinweise:
+   - Dialog: role="dialog" aria-modal="true"
+   - Close-Button: <button aria-label="Schließen">
+   - Beim Öffnen Fokus in den Dialog setzen, beim Schließen Fokus zurückgeben
+   ========================================================================== */
+
+
+.video-modal{
+  /* Start: versteckt */
+  display: none;
+
+  /* immer als Overlay über allem */
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  /* Hintergrund */
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+
+  /* Layout */
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+
+  /* Sicherheit */
+  box-sizing: border-box;
+}
+
+/* Falls ihr statt inline-style später lieber Klassen nutzt */
+.video-modal.is-open{
+  display: flex;
+}
+
+/* Modal-Box */
+.video-modal-content{
+  position: relative;
+  box-sizing: border-box;
+
+  width: min(960px, 92vw);
+  max-height: 85vh;
+
+  padding: 1rem;
+  border-radius: 16px;
+
+  /* Video wirkt am besten auf dunkel */
+  background: #000;
+
+  /* falls Inhalte zu groß werden */
+  overflow: hidden;
+
+  box-shadow: 0 24px 60px rgba(0,0,0,0.55);
+}
+
+/* Close Button */
+.video-close{
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+
+  color: #fff;
+  font-size: 1.9rem;
+  line-height: 1;
+
+  cursor: pointer;
+  user-select: none;
+
+  padding: 0.1rem 0.35rem;
+  border-radius: 10px;
+}
+
+.video-close:hover{
+  background: rgba(255,255,255,0.10);
+}
+
+/* Video selbst: MUSS eine sichtbare Fläche bekommen */
+.video-player{
+  display: block;
+  width: 100%;
+  height: auto;
+
+  /* verhindert „ich höre Ton, sehe aber 0px Höhe“ */
+  max-height: 75vh;
+
+  border-radius: 12px;
+  background: #000;
+
+  /* falls Browser/Styles komisch sind */
+  object-fit: contain;
+}
+
+/* kleine Screens */
+@media (max-width: 700px){
+  .video-modal-content{
+    width: 94vw;
+    padding: 0.8rem;
+    border-radius: 14px;
+  }
+  .video-player{
+    max-height: 70vh;
+    border-radius: 10px;
+  }
+}

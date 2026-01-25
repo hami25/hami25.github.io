@@ -1,0 +1,262 @@
+/* ==========================================================================
+   Curriculum Facts (rechte Kachel)
+
+   Zweck:
+   - Rechte Infokachel neben dem Curriculum (Facts/Key-Infos)
+   - “Glass Panel” + Glow Hintergründe
+   - Einträge (.cf-item) mit Icon-Badge links und Text rechts
+
+   Struktur/HTML-Vertrag (implizit):
+   - Container: .curriculum-facts
+   - Titel: .cf-title
+   - Eintrag: .cf-item
+     - Icon: .cf-icon
+     - Text: .cf-text -> .cf-label + .cf-value
+   ========================================================================== */
+
+/* ===========================
+   FACTS PANEL (rechte Kachel)
+   =========================== */
+
+.curriculum-facts{
+  /* Außenabstand/“Card”-Geometrie */
+  padding: 1.8rem 1.8rem 2rem;
+  border-radius: 26px;
+
+  /* Background Layering:
+    - 3 Glow-Radials (Token-basiert)
+    - darunter das eigentliche Panel (var(--panel-strong)) */
+  background:
+    radial-gradient(circle at 20% 15%, var(--glow-1), transparent 70%),
+    radial-gradient(circle at 80% 85%, var(--glow-2), transparent 75%),
+    radial-gradient(circle at 60% 10%, var(--glow-3), transparent 75%),
+    var(--panel-strong);
+
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  color: var(--text);
+
+  /* Glass-Effekt */
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+
+  /* Font bewusst gesetzt, damit Sidebar unabhängig bleibt */
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* obere Glow-Linie (Dekorationsleiste)
+   - sitzt als ::before über dem Panel und “klemmt” an die Rundung */
+.curriculum-facts::before{
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  border-radius: 26px 26px 0 0;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent), var(--accent-3));
+  opacity: 1;
+}
+
+/* ===========================
+   TITLE
+   =========================== */
+
+.cf-title{
+  margin: 0 0 1.8rem;
+  font-size: 1.9rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
+  color: var(--text);
+}
+
+/* Pfeil vor dem Titel
+- hardcoded Uni-Rot (Designentscheidung).  */
+.cf-title::before{
+  content: "➜";
+  font-size: 2.65rem;
+  line-height: 1;
+  color: #b91c1c; /* Uni-Rot */
+  font-weight: 900;
+}
+
+/* ===========================
+   ITEMS
+   =========================== */
+
+.cf-item{
+  /* Wrapper pro Fact */
+  position: relative;
+  padding: 1rem 1.2rem;
+  border-radius: 18px;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  margin-bottom: 0.9rem;
+
+  /* Layout: Icon links, Text rechts */
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+
+  /* Hover-Animation */
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+/* Gradient-Rahmen via Masking (overlay)
+   - Pointer-events: none, damit Klick/Selection nicht blockiert wird */
+.cf-item::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  padding: 1px;
+  background: linear-gradient(135deg, #f4c289, #8dd3ce, #a855f7);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.cf-item:hover{
+  background: var(--panel);
+}
+
+.cf-item:hover::before{
+  opacity: 1;
+}
+
+
+/* ===========================
+   ICON BADGE
+   =========================== */
+
+.cf-icon{
+  /* Fixe Icon-Größe, damit Ausrichtung konstant bleibt */
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  line-height: 1;
+  background: radial-gradient(circle at 30% 20%, #1b1b1b, #000);
+  color: #f4c289;
+
+  /* “Goldrand” wird über ::before gelöst, Border hier bleibt transparent */
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+  margin-top: 0.2rem;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* Gold-Outline (Masking)
+   - sitzt hinter dem Icon (z-index -1 relativ zum Icon) */
+.cf-icon::before{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  padding: 2px;
+  background: linear-gradient(135deg, #f4c289, #d9a667, #b88645);
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  z-index: -1;
+  opacity: 0.9;
+}
+
+/* Hover auf Item hebt Icon leicht an (gekoppelt an .cf-item:hover) */
+.cf-item:hover .cf-icon{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.75);
+}
+
+/* ===========================
+   TEXT BLOCK
+   =========================== */
+
+.cf-text{
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+/* Label */
+.cf-label{
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--muted);
+  opacity: 0.78;
+}
+
+/* Inhalt */
+.cf-value{
+  font-size: 0.98rem;
+  line-height: 1.45;
+  color: var(--text);
+  opacity: 0.97;
+}
+
+/* Accent-Variante für einzelne Values */
+.cf-value-accent{
+  color: #fca5a5;
+  font-weight: 600;
+}
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+/* Auf kleinen Geräten: Facts-Kachel unter das Curriculum schieben*/
+@media only screen and (max-width: 900px){
+  .curriculum-layout{
+    display: block;
+  }
+
+  .curriculum{
+    width: 100%;
+  }
+
+  .curriculum-facts{
+    position: static;
+    width: 100%;
+    max-width: none;
+    margin-top: 1.5rem;
+
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+/* ===========================
+   LIGHT THEME TWEAKS (nur Icon)
+   =========================== */
+
+:root[data-theme="light"] .cf-icon{
+  background: radial-gradient(circle at 30% 20%, rgba(11,90,166,0.18), rgba(255,255,255,0.9));
+  color: var(--accent);
+  box-shadow: 0 8px 18px rgba(15,23,42,0.12);
+}
+
+:root[data-theme="light"] .cf-icon::before{
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  opacity: 0.65;
+}

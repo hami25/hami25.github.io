@@ -1,0 +1,129 @@
+/*
+  Grundstyles und Design-Tokens.
+  Tokens in :root / :root[data-theme="light"] ändern → wirkt auf die ganze App.
+  Komponenten-spezifische Styles bitte NICHT hier ablegen.
+*/
+
+
+/* =========================
+   Design-Tokens (Standard: Dark)
+   ========================= */
+:root{
+  /* Basis-Theme */
+  --bg: #0e141f;
+  --text: rgba(255,255,255,.92);
+  --muted: rgba(255,255,255,.72);
+
+  --panel: rgba(30, 41, 59, 0.35);
+  --panel-strong: rgba(17, 25, 40, 0.82);
+  --panel-soft: rgba(255,255,255,0.05);
+
+  --border: rgba(255,255,255,0.10);
+  --shadow: 0 10px 30px rgba(0,0,0,.35);
+
+  /* Akzente */
+  --accent: #8dd3ce;      /* mint */
+  --accent-2: #f4c289;    /* gold */
+  --accent-3: #a855f7;    /* purple */
+
+  /* Glow-Hintergründe für body */
+  --glow-1: rgba(244, 194, 137, 0.22);
+  --glow-2: rgba(141, 211, 206, 0.22);
+  --glow-3: rgba(168, 85, 247, 0.12);
+
+  --container: 1200px;
+
+  --radius-lg: 24px;
+  --radius-md: 16px;
+}
+
+/* =========================
+   Design-Tokens (Light Theme)
+   ========================= */
+:root[data-theme="light"]{
+  --bg: #f6f7fb;
+  --text: rgba(15,23,42,.95);
+  --muted: rgba(15,23,42,.70);
+
+  --panel: rgba(255,255,255,0.85);
+  --panel-strong: rgba(255,255,255,0.92);
+  --panel-soft: rgba(15,23,42,0.04);
+
+  --border: rgba(15,23,42,0.12);
+  --shadow: 0 12px 28px rgba(15,23,42,.12);
+
+
+
+  /* HSRM-like Akzente (anpassbar) */
+  --accent: #0b5aa6;       /* blau-ish */
+  --accent-2: #c8102e;     /* HSRM-rot-ish */
+  --accent-3: #00a3a6;     /* türkis-ish */
+
+  /* dezente glows im hellen */
+  --glow-1: rgba(200,16,46,0.10);
+  --glow-2: rgba(11,90,166,0.10);
+  --glow-3: rgba(0,163,166,0.08);
+}
+
+/* =========================
+   Reset
+   ========================= */
+*{ box-sizing: border-box; }
+html, body{ height: 100%; }
+html { scroll-behavior: smooth; }
+
+/* =========================
+   Basis
+   ========================= */
+body{
+  margin: 0;
+  color: var(--text);
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  line-height: 1.5;
+
+  /* Tokens für Glow-Farben verwenden (Werte stehen in :root) */
+  background:
+    radial-gradient(circle at 15% 25%, rgba(244, 194, 137, 0.22), transparent 70%),
+    radial-gradient(circle at 85% 65%, rgba(141, 211, 206, 0.22), transparent 65%),
+    radial-gradient(circle at 50% 10%, rgba(168, 85, 247, 0.12), transparent 60%),
+    var(--bg);
+  background-attachment: fixed;
+}
+
+img, video{ max-width: 100%; height: auto; }
+
+a{ color: inherit; }
+
+/* =========================
+   Accessibility/Barrierefreiheit Utilities
+   ========================= */
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link{
+  position:absolute;
+  left:-999px;
+  top: 0.75rem;
+  background:#fff;
+  color:#000;
+  padding: .6rem .9rem;
+  border-radius: 10px;
+  z-index: 10000;
+}
+.skip-link:focus{ left: 0.75rem; }
+
+
+
+
+
+
+

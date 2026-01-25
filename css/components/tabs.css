@@ -1,0 +1,158 @@
+/*==========================================================================
+   Funky Tabs (WI Tabs)
+
+   Zweck:
+   - Horizontale Tab-Leiste mit “Pill”-Tabs
+   - Aktiver Tab wird über .is-active markiert
+   - Ein “Indicator” (.wi-tab-indicator) wird per JS unter den aktiven Tab geschoben
+     (transform + width)
+
+   JS/HTML-Vertrag:
+   - Container: .wi-tabs-funky
+   - Tab-Button: .wi-tab (z.B. <button>)
+   - Aktiv: .wi-tab.is-active
+   - Indicator Element: .wi-tab-indicator (ein Kind im Container)
+   - Progressive Enhancement: .wi-tabs-enhanced wird gesetzt, wenn JS die Indicator-
+     Position dynamisch berechnet; ohne JS greift der Fallback.
+========================================================================== */
+
+
+/* ===========================
+   CONTAINER
+   =========================== */
+
+.wi-tabs-funky{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  /* Innenabstand = “Rahmen” für Indicator + Tabs */
+  padding: 6px;
+  border-radius: 99px;
+
+  /* Look  */
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(10px);
+  margin: 1.5rem 0 2rem;
+}
+
+
+/* ===========================
+   TAB BUTTONS
+   =========================== */
+
+.wi-tabs-funky .wi-tab{
+  position: relative;
+  z-index: 2; /* über dem Indicator */
+
+  border: none;
+  background: transparent;
+
+  /* Basisfarbe  */
+  color: var(--muted);
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  padding: 0.5rem 1.2rem 0.5rem 1rem;
+  border-radius: 999px;
+
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  transition: color 0.25s ease, transform 0.15s ease;
+}
+
+/* Icon aus data-Attribut  */
+.wi-tabs-funky .wi-tab::before{
+  content: attr(data-icon);
+  font-size: 1.1rem;
+}
+
+/* Hover */
+.wi-tabs-funky .wi-tab:hover{
+  transform: translateY(-1px);
+}
+
+/* Aktiver Tab  */
+.wi-tabs-funky .wi-tab.is-active{
+  color: #f9fafb;
+}
+
+
+/* ===========================
+   INDICATOR (gleitender Hintergrund)
+   =========================== */
+
+.wi-tabs-funky .wi-tab-indicator{
+  position: absolute;
+
+  /* Füllt den Container, wird aber per margin “eingezogen” damit es wie Padding wirkt */
+  inset: 0;
+  margin: 0.2rem;
+
+  border-radius: 999px;
+
+  /* Look */
+  background: radial-gradient(circle at 0% 0%, #22d3ee, #3b82f6, #a855f7);
+  opacity: 0.9;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
+
+  z-index: 1;
+  pointer-events: none;
+
+  /* JS setzt width + transform passend zum aktiven Tab */
+  transition: transform 0.25s ease, width 0.25s ease;
+}
+
+/* Fallback ohne JS:
+   Wenn .wi-tabs-enhanced NICHT gesetzt ist, wird eine fixe Breite verwendet.
+   (Annahme: ~4 Tabs → 25% passt “ungefähr”) */
+.wi-tabs-funky:not(.wi-tabs-enhanced) .wi-tab-indicator{
+  width: 25%;
+}
+
+
+/* ===========================
+    MOBILE
+   =========================== */
+@media (max-width: 1200px){
+  .wi-tabs-funky{
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+
+    /* mobile spacing: weniger “wuchtig” */
+    margin: 0;
+  }
+  .wi-tabs-funky::-webkit-scrollbar{ display:none; }
+
+  .wi-tabs-funky .wi-tab{
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  /* Optional, aber empfohlen:
+     der Indicator macht beim Scrollen oft “komisch” – daher aus */
+  .wi-tab-indicator{ display:none; }
+
+  /* Active Tab trotzdem sichtbar machen */
+  .wi-tabs-funky .wi-tab.is-active{
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+
+
+  :root[data-theme="light"] .wi-tabs-funky .wi-tab.is-active{
+    background: rgba(15,23,42,.08);
+    border-color: rgba(15,23,42,.18);
+  }
+}
+

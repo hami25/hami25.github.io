@@ -1,0 +1,1159 @@
+/* ==========================================================================
+   Zweck:
+   - Styling für alle Modals/Dialogs (Overlay + Backdrop + Dialog-Box)
+   - Enthält außerdem DS-spezifische UI-Styles (Quiz / Drag&Drop) im ds-modal
+
+   Betroffene Modals im HTML:
+   - #faq-modal      (.faq-modal-*)
+   - #career-modal   (.career-modal-*)
+   - #ds-modal       (.ds-modal-*) + .ds-* UI
+   - #info-modal     nutzt ds-modal Struktur, bekommt aber eigene Overrides
+
+   Öffnen/Schließen:
+   - Sichtbarkeit wird über .is-open am Modal-Container gesteuert.
+   ========================================================================== */
+
+
+/* =============================================================================
+   1) FAQ MODAL (Overlay + Dialog)
+   ============================================================================= */
+
+.faq-modal {
+  display: none;  /* Default: unsichtbar, wird via .is-open gezeigt */
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.faq-modal.is-open {
+  display: block;
+}
+
+.faq-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);  /* Abdunklung des Hintergrunds */
+}
+
+.faq-modal-dialog {
+  position: relative;
+
+  /* Dialog-Größe/Responsiveness */
+  width: 1000px;
+  max-width: 95vw;
+  max-height: 65vh;
+
+  /* Vertikale Zentrierung über translate */
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+
+  padding: 1.8rem;
+  background: #ffffff;
+  border-radius: 14px;
+
+  /* Scrollen nur im Dialog (Seite bleibt “stehen”) */
+  overflow-y: auto;
+
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+}
+
+.faq-modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* FAQ IM MODAL: inneres "Fenster" flach machen */
+.faq-modal-dialog .faq-hand {
+  max-width: 100%;
+  margin: 0;
+  padding: 0 0 1.5rem;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Im FAQ-Modal: vorhandene FAQ-Layouts “flachziehen”, damit Dialog nicht doppelt gepanelt wirkt */
+.faq-modal-dialog .fh-hand {
+  margin-top: 1.5rem;
+  padding: 0;
+}
+
+/* Sicherheit: im Modal keine Transformation auf dem gesamten Block */
+.faq-modal-dialog .faq-hand,
+.faq-modal-dialog .fh-hand {
+  transform: none;
+}
+
+
+
+/* =============================================================================
+   2) CAREER MODAL (Overlay + Dialog)
+   ============================================================================= */
+
+.career-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+}
+
+.career-modal.is-open {
+  display: block;
+}
+
+.career-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.career-modal-dialog {
+  position: relative;
+  width: 900px;         /* feste Breite wie FAQ */
+  height: 650px;        /* feste Höhe wie FAQ */
+  max-width: 90vw;
+  max-height: 90vh;
+  margin: auto;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 1.8rem;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow-y: auto;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+}
+
+.career-modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* =============================================================================
+   3) DS MODAL (generisches Modal + Diskrete-Strukturen UI)
+   Hinweis: z-index hier ist bewusst sehr hoch (9999), damit es über allem liegt.
+   ============================================================================= */
+
+.ds-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  z-index: 9999;  /* höher als FAQ/Career, falls Overlays/Layering kollidieren */
+}
+.ds-modal.is-open {
+  display: block;
+}
+.ds-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+}
+.ds-modal-dialog {
+  color: #222;
+  position: relative;
+  max-width: 860px;
+  max-height: 90vh;
+  margin: 3vh auto;
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 18px 40px rgba(0,0,0,0.25);
+  padding: 1.5rem 1.8rem;
+  overflow-y: auto;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+.ds-modal-close {
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  border: none;
+  background: transparent;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.ds-modal h2 {
+  margin-top: 0;
+  font-size: 1.7rem;
+  margin-right: 2rem;
+}
+
+/* =============================================================================
+   4) DS UI (Quiz / Checklisten / Drag&Drop) – gilt im ds-modal-body
+   ============================================================================= */
+
+.ds-intro {
+  font-size: 0.95rem;
+  color: #555;
+  margin-bottom: 1rem;
+}
+.ds-section {
+  margin-bottom: 1.4rem;
+  padding-top: 0.8rem;
+  border-top: 1px solid #eee;
+}
+.ds-section h3 {
+  margin-top: 0;
+  margin-bottom: 0.35rem;
+  font-size: 1.15rem;
+}
+.ds-hint {
+  font-size: 0.85rem;
+  color: #777;
+  margin-bottom: 0.6rem;
+}
+
+.ds-checklist {
+  list-style: none;
+  padding-left: 0;
+  margin: 0 0 0.8rem;
+}
+.ds-checklist li {
+  margin-bottom: 0.35rem;
+}
+.ds-checklist label {
+  display: block;
+  background: #f5f5f8;
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.ds-checklist input {
+  margin-right: 0.4rem;
+}
+
+.ds-question {
+  margin-bottom: 0.9rem;
+  font-size: 0.9rem;
+}
+.ds-question p {
+  margin-bottom: 0.3rem;
+}
+.ds-question label {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+.ds-question input {
+  margin-right: 0.3rem;
+}
+
+.ds-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 0.55rem 1.1rem;
+  background: #007acc;
+  color: #fff;
+  font-size: 0.9rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+.ds-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+.ds-btn:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+.ds-feedback {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+}
+.ds-feedback.ok { color: #137333; }
+.ds-feedback.warn { color: #b06100; }
+.ds-feedback.error { color: #b00020; }
+
+/* Drag & Drop */
+.ds-dnd {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.ds-dnd-column {
+  flex: 1 1 220px;
+}
+.ds-dnd-item {
+  background: #eef4ff;
+  border-radius: 10px;
+  padding: 0.4rem 0.6rem;
+  margin-bottom: 0.4rem;
+  font-size: 0.9rem;
+  cursor: grab;
+  user-select: none;
+}
+.ds-dnd-item.dragging {
+  opacity: 0.7;
+  outline: 2px dashed #007acc;
+}
+.ds-drop {
+  background: #f8f8fa;
+  border-radius: 10px;
+  padding: 0.5rem 0.7rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+.ds-drop-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #777;
+}
+.ds-drop-slot {
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.5rem;
+  border-radius: 8px;
+  border: 1px dashed #ccc;
+  min-height: 1.7rem;
+  display: inline-block;
+  font-size: 0.85rem;
+  color: #666;
+}
+.ds-drop-slot.filled {
+  border-style: solid;
+  background: #eaf5ff;
+}
+.ds-drop.over {
+  outline: 2px dashed #007acc;
+}
+
+.ds-summary {
+  padding-bottom: 0.5rem;
+}
+
+.ds-info-block {
+  margin-bottom: 1rem;
+}
+
+.ds-info-block h3 {
+  margin: .25rem 0 .25rem;
+}
+
+.ds-info-block ul {
+  margin: .25rem 0 0 1.25rem;
+}
+
+
+/* ===== Semester 3 Add-ons ===== */
+
+/* Linked Nodes */
+.linked-node {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 10px 0 14px;
+}
+.linked-node .node {
+  padding: 10px 14px;
+  border-radius: 10px;
+  background: #2196F3;
+  font-weight: 700;
+}
+.linked-node .arrow {
+  font-size: 20px;
+  opacity: .7;
+}
+
+/* BubbleSort Bars */
+.bubble-container .bar {
+  background: #2196F3;
+}
+
+/* Diagramm */
+.diagramm-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 10px 0 14px;
+  flex-wrap: wrap;
+}
+.diagramm {
+  border: 1px solid #bbb;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 190px;
+}
+.diagramm-header {
+  background: #f5f5f5;
+  padding: 8px 10px;
+  font-weight: 800;
+}
+.diagramm-body {
+  padding: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.95rem;
+}
+.diagramm-container .arrow {
+  font-size: 22px;
+  opacity: .7;
+}
+
+/* Statistik Code */
+.code-content pre {
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 12px;
+  border-radius: 12px;
+  overflow: auto;
+}
+.inline-dropdown {
+  padding: 4px 6px;
+  border-radius: 8px;
+}
+
+/* Simple DragDrop */
+.s3-dd { margin: 10px 0 14px; }
+.s3-dropzone {
+  border: 2px dashed #666;
+  border-radius: 12px;
+  padding: 10px;
+  margin-bottom: 12px;
+  background: #fafafa;
+}
+.s3-dropzone.is-over { outline: 2px solid #4a90e2; }
+.s3-dropitems { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+.s3-chiptray { display: flex; flex-wrap: wrap; gap: 10px; }
+.s3-chip {
+  padding: 8px 12px;
+  background: #4a90e2;
+  border-radius: 10px;
+  cursor: grab;
+  user-select: none;
+}
+
+
+/* =============================================================================
+   5) Theme/Glass Overrides je Modal (Tokens aus theme/base)
+   ============================================================================= */
+
+/* INFO MODAL – nutzt ds-modal Struktur, bekommt aber “Glass”-Panel */
+#info-modal .ds-modal-dialog{
+  background: var(--panel-strong);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+#info-modal .ds-intro{
+  color: var(--muted);
+}
+
+
+#info-modal h2#info-modal-title{
+  margin-top: 0;
+  font-size: 1.7rem;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  padding-left: .75rem;
+}
+
+#info-modal h2#info-modal-title::before{
+  content: "ℹ️";
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+#info-modal .ds-modal-close{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow: var(--shadow);
+}
+
+#info-modal .ds-modal-close:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+
+/* =========================
+   INFO MODAL – über Curriculum zentrieren
+   ========================= */
+#info-modal{
+  justify-content: flex-start;
+}
+
+#info-modal .ds-modal-dialog{
+  margin: 2rem 0;
+  position: relative;
+  top: 0;
+  transform: none;
+  left: calc(
+    (100vw - min(2200px, 100vw)) / 2 + 280px
+  );
+
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+}
+
+/* =========================
+   FAQ MODAL – Theme/Glass Override
+   ========================= */
+
+#faq-modal{
+
+}
+
+#faq-modal .faq-modal-dialog{
+  background: var(--panel-strong);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+#faq-modal .fh-intro{
+  color: var(--muted);
+}
+
+#faq-modal .faq-modal-close{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+#faq-modal .faq-modal-close:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Modal-Wrapper: flex, damit wir links starten können */
+#faq-modal.is-open{
+  display: flex;
+  justify-content: flex-start;  /* nicht center */
+}
+
+/* FAQ-Dialog: vertikal zentriert, horizontal am Curriculum ausrichten */
+#faq-modal.is-open .faq-modal-dialog{
+  margin: 0;
+  top: 40%;
+  transform: translateY(-50%);
+
+  /* linke Kante am Layout ausrichten + nach rechts schieben */
+  left: calc((100vw - min(2200px, 100vw)) / 2 + 210px);
+}
+
+/* =========================
+   CAREER MODAL – Theme/Glass Override
+   ========================= */
+
+#career-modal .career-modal-dialog{
+  background: var(--panel-strong);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Close-Button wie bei Info/FAQ */
+#career-modal .career-modal-close{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+
+#career-modal .career-modal-close:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Career-Modal über Curriculum ausrichten */
+#career-modal.is-open{
+  display: flex;
+  justify-content: flex-start;
+}
+
+#career-modal.is-open .career-modal-dialog{
+  margin: 0;
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+  left: calc((100vw - min(2200px, 100vw)) / 2 + 260px); /* Offset anpassen */
+}
+
+/* =========================
+   DISKRETE STRUKTUREN MODAL – Theme/Glass Override
+   ========================= */
+
+#ds-modal .ds-modal-dialog{
+  background: var(--panel-strong);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Intro-/Hint-Texte */
+#ds-modal .ds-intro,
+#ds-modal .ds-hint{
+  color: var(--muted);
+}
+
+
+#ds-modal .ds-section{
+  border-top: none;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+}
+#ds-modal .ds-section h3{
+  color: var(--text);
+  font-weight: 800;
+}
+
+
+#ds-modal .ds-modal-close{
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+}
+#ds-modal .ds-modal-close:hover{
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+
+#ds-modal .ds-checklist label{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+#ds-modal .ds-checklist label:hover{
+  background: var(--panel-soft);
+}
+
+#ds-modal input[type="checkbox"],
+#ds-modal input[type="radio"]{
+  accent-color: var(--accent);
+}
+
+
+#ds-modal .ds-dnd-item{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+#ds-modal .ds-dnd-item.dragging{
+  outline: 2px dashed var(--accent);
+}
+
+#ds-modal .ds-drop{
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+}
+
+#ds-modal .ds-drop-label{
+  color: var(--muted);
+}
+
+#ds-modal .ds-drop-slot{
+  color: var(--muted);
+  border: 1px dashed rgba(255,255,255,0.22);
+}
+
+:root[data-theme="light"] #ds-modal .ds-drop-slot{
+  border-color: rgba(15,23,42,0.22);
+}
+
+#ds-modal .ds-drop-slot.filled{
+  border-style: solid;
+  background: var(--panel);
+}
+
+#ds-modal .ds-btn{
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  border: none;
+  box-shadow: var(--shadow);
+}
+
+
+/* =========================
+   DISKRETE STRUKTUREN MODAL – über Curriculum positionieren
+   ========================= */
+
+#ds-modal.is-open{
+  display: flex;
+  justify-content: flex-start; /* nicht zentrieren */
+  align-items: flex-start; /*  verhindert Stretch in der Höhe */
+}
+
+#ds-modal.is-open .ds-modal-dialog{
+  margin: 0;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(
+    (100vw - min(2200px, 100vw)) / 2 + 280px
+  );
+}
+
+.ds-nav-spacing { margin-top: 1rem; }
+.ds-feedback-spacing { margin-top: .6rem; }
+
+/* Video */
+.video-player{
+  width: 100%;
+  max-width: 900px;
+}
+
+/* =====================================================
+   DS MODAL – Aufgaben (Drag & Drop / Zuordnung / Lücken)
+   ===================================================== */
+
+.ds-pool {
+  display: flex;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-top: .5rem;
+}
+
+.ds-chip {
+  padding: .35rem .6rem;
+  border: 1px solid currentColor;
+  border-radius: .75rem;
+  cursor: grab;
+  user-select: none;
+  background: transparent;
+}
+
+.ds-chip.is-dragging {
+  opacity: .6;
+}
+
+.ds-dropzone,
+.ds-inline-dropzone {
+  border: 2px dashed currentColor;
+  border-radius: .75rem;
+  padding: .4rem .6rem;
+  min-height: 2.2rem;
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+}
+
+.ds-dropzone.is-over,
+.ds-inline-dropzone.is-over {
+  transform: scale(1.02);
+}
+
+.ds-dropzone-placeholder {
+  opacity: .65;
+}
+
+.ds-dropzone-filled {
+  font-weight: 600;
+}
+
+/* Zuordnung */
+.ds-zuordnung {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.ds-zuordnung-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .75rem;
+  align-items: center;
+  margin: .4rem 0;
+}
+
+.ds-zuordnung-begriff {
+  font-weight: 600;
+}
+
+/* Lückentext */
+.ds-lueckentext-text {
+  line-height: 1.6;
+}
+
+/* Mini-Clear-Button */
+.ds-mini-btn {
+  border: 1px solid currentColor;
+  border-radius: .5rem;
+  padding: 0 .45rem;
+  background: transparent;
+  cursor: pointer;
+  font-size: .9em;
+}
+
+/* Dropdown */
+.ds-select {
+  padding: .25rem .4rem;
+  border-radius: .5rem;
+}
+
+/* Sortierung (Drag & Drop) */
+.ds-sort-list {
+  margin: .5rem 0 0;
+  padding-left: 1.25rem; /* für <ol> Zahlen */
+}
+
+.ds-sort-item {
+  list-style: decimal;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: .5rem;
+  align-items: center;
+  padding: .45rem .6rem;
+  border: 1px solid currentColor;
+  border-radius: .75rem;
+  margin: .35rem 0;
+  cursor: grab;
+  user-select: none;
+}
+
+.ds-sort-item.is-dragging {
+  opacity: .6;
+}
+
+.ds-sort-handle {
+  font-weight: 700;
+  opacity: .8;
+}
+
+
+
+/* FÜR Mobile vorbereiten*/
+.ds-chip.is-selected,
+.s3-chip.is-selected{
+  outline: 2px solid var(--accent);
+  transform: scale(1.02);
+}
+
+/* Beim Ziehen keine Textmarkierung / kein "Ghost-Text" */
+.ds-chip,
+.s3-chip,
+.ds-sort-item{
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+
+/* =========================
+   WELCOME MODAL
+   ========================= */
+
+/* Start: versteckt */
+#quiz-modal{
+  display: none;
+}
+
+/* Wenn offen */
+#quiz-modal.is-open{
+  display: flex;
+}
+
+#quiz-modal.modal-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 1rem;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(6px);
+}
+
+#quiz-modal .modal-content{
+  width: 860px;
+  max-width: 92vw;
+  max-height: 80vh;
+  overflow: auto;
+
+  background: #fff;
+  border-radius: 14px;
+  padding: 1.6rem 1.6rem 1.2rem;
+
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.35);
+  position: relative;
+}
+
+/* Close Button */
+#quiz-modal .close-btn{
+  position: absolute;
+  top: 0.6rem;
+  right: 0.8rem;
+  cursor: pointer;
+
+  font-size: 1.7rem;
+  line-height: 1;
+  user-select: none;
+}
+
+/* Darkmode */
+:root[data-theme="dark"] #quiz-modal .modal-content{
+  background: #0b1220;
+  color: rgba(255,255,255,0.92);
+}
+
+/* schöner Abstand in der Liste */
+#quiz-modal .anleitung-liste{
+  margin: 1rem 0 1.2rem;
+  padding-left: 1.2rem;
+}
+
+#quiz-modal .anleitung-liste li{
+  margin: .7rem 0;
+}
+
+#quiz-modal .quiz-btn{
+  display: inline-block;
+  margin-top: .3rem;
+}
+
+#quiz-modal .modal-content{
+  padding: 1.6rem 1.6rem 1.2rem;
+  border: 1px solid rgba(15,23,42,0.10);
+}
+
+#quiz-modal #quiz-inhalt{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+#quiz-modal .welcome-badge{
+  display: inline-flex;
+  width: fit-content;
+  padding: .35rem .6rem;
+  border-radius: 999px;
+  font-size: .85rem;
+  border: 1px solid rgba(15,23,42,0.14);
+  background: rgba(15,23,42,0.04);
+}
+
+#quiz-modal h1{
+  margin: .6rem 0 .25rem;
+  font-size: 1.55rem;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+}
+
+#quiz-modal .welcome-lead{
+  margin: 0;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  opacity: .9;
+}
+
+#quiz-modal .welcome-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: .8rem;
+  margin-top: .4rem;
+}
+
+@media (min-width: 900px){
+  #quiz-modal .welcome-grid{
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+#quiz-modal .welcome-card{
+  border: 1px solid rgba(15,23,42,0.12);
+  background: rgba(15,23,42,0.03);
+  border-radius: 14px;
+  padding: .9rem .95rem;
+}
+
+#quiz-modal .step{
+  display: flex;
+  gap: .75rem;
+  align-items: flex-start;
+}
+
+#quiz-modal .step-num{
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  border: 1px solid rgba(15,23,42,0.18);
+  background: rgba(15,23,42,0.06);
+  flex: 0 0 auto;
+}
+
+#quiz-modal .step-body h3{
+  margin: 0 0 .25rem;
+  font-size: 1.02rem;
+}
+
+#quiz-modal .step-body p{
+  margin: 0;
+  line-height: 1.5;
+  opacity: .9;
+}
+
+#quiz-modal .welcome-tip{
+  padding: .85rem .95rem;
+  border-radius: 14px;
+  border: 1px dashed rgba(15,23,42,0.22);
+  background: rgba(15,23,42,0.03);
+}
+
+#quiz-modal .welcome-actions{
+  display: flex;
+  gap: .65rem;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  margin-top: .25rem;
+}
+
+#quiz-modal .quiz-btn{
+  padding: .7rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(15,23,42,0.18);
+  background: rgba(15,23,42,0.10);
+  cursor: pointer;
+  font-weight: 600;
+}
+
+#quiz-modal .quiz-btn:hover{
+  transform: translateY(-1px);
+}
+
+#quiz-modal .quiz-btn.secondary{
+  background: transparent;
+  opacity: .9;
+}
+
+/* Darkmode */
+:root[data-theme="dark"] #quiz-modal .modal-content{
+  border-color: rgba(255,255,255,0.12);
+}
+
+:root[data-theme="dark"] #quiz-modal .welcome-badge{
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+}
+
+:root[data-theme="dark"] #quiz-modal .welcome-card{
+  border-color: rgba(255,255,255,0.14);
+  background: rgba(255,255,255,0.06);
+}
+
+:root[data-theme="dark"] #quiz-modal .step-num{
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.08);
+}
+
+:root[data-theme="dark"] #quiz-modal .welcome-tip{
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.06);
+}
+
+:root[data-theme="dark"] #quiz-modal .quiz-btn{
+  border-color: rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.10);
+}
+:root[data-theme="dark"] #quiz-modal .quiz-btn.secondary{
+  background: transparent;
+}
+
+
+/* =============================================================================
+   8) Responsive
+   Hinweis: betrifft .ds-modal-dialog allgemein → greift auch für #info-modal,
+   weil es ebenfalls .ds-modal-dialog verwendet
+   ============================================================================= */
+
+/* =========================
+    MOBILE: alle Modals sauber zentrieren (keine Desktop-Offets)
+    ========================= */
+@media (max-width: 720px){
+
+  /* Overlays als Flex, damit zentrieren sicher klappt */
+  #faq-modal.is-open,
+  #career-modal.is-open,
+  #ds-modal.is-open,
+  #info-modal.is-open{
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Dialogboxen: volle Breite im Viewport, keine left/top calc Offsets */
+  #faq-modal .faq-modal-dialog,
+  #career-modal .career-modal-dialog,
+  #ds-modal .ds-modal-dialog,
+  #info-modal .ds-modal-dialog{
+    position: relative !important;
+
+    left: auto !important;
+    right: auto !important;
+    top: auto !important;
+    bottom: auto !important;
+
+    transform: none !important;
+
+    width: calc(100% - 2rem) !important;
+    max-width: 720px !important;
+    max-height: calc(100vh - 2rem) !important;
+
+    margin: 1rem !important;
+    overflow-y: auto;
+  }
+
+
+
+}
+

@@ -1,0 +1,336 @@
+/* ==========================================================================
+   Career Swipe / Career Finder Cards
+
+   Zweck:
+   - “Swipe”-artige Karten-UI (Intro, Progress, Karte, Buttons, Ergebnis)
+   - Es gibt zwei “Kontexte”:
+     1) Standalone (außerhalb Modal): .career-swipe (weißes Panel)
+     2) Im Modal (#career-modal): Overrides für Theme/Glass-Look
+
+   JS/HTML-Vertrag (implizit):
+   - .cs-card bekommt beim Wegswipen Klasse .swipe-out (Animation)
+   - Buttons haben Variantenklassen: .cs-btn-no / .cs-btn-yes / optional .cs-btn-maybe / .cs-btn-dream
+   - Ergebnisbereich: .cs-result, dazu optional strukturierte Listenklassen
+     (.cs-result-list, .cs-result-item, .cs-why, .cs-modules, .cs-result-block)
+   ========================================================================== */
+
+/* =========================
+   1) STANDALONE (außerhalb Modal)
+   ========================= */
+
+.career-swipe{
+  max-width: 480px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #ffffff;
+}
+
+/* Headline im Block */
+.career-swipe h2{
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.6rem;
+  text-align: center;
+}
+
+/* Intro/Progress Texte */
+.cs-intro{
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  margin-bottom: 1.2rem;
+}
+
+.cs-progress{
+  text-align: center;
+  margin-bottom: 0.8rem;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+
+/* =========================
+   2) CARD (Swipe-UI)
+   ========================= */
+
+.cs-card{
+  position: relative;
+  background: linear-gradient(135deg, #f5f7ff, #eef9ff);
+
+  border-radius: 18px;
+  padding: 1.4rem 1.2rem;
+  min-height: 170px;
+
+  overflow: hidden;
+
+  /* wird per JS über .swipe-out animiert */
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.cs-card.swipe-out{
+  opacity: 0;
+  transform: translateX(-20px);
+}
+
+/* kleine “Kategorie”-Pill */
+.cs-pill{
+  display: inline-block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.06);
+  color: #555;
+
+  margin-bottom: 0.5rem;
+}
+
+.cs-emoji{
+  font-size: 2rem;
+  margin-bottom: 0.4rem;
+}
+
+.cs-title{
+  margin: 0 0 0.3rem;
+  font-size: 1.3rem;
+}
+
+.cs-desc{
+  margin: 0 0 0.8rem;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* Tags unter der Beschreibung */
+.cs-tags{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.cs-tag{
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,0.05);
+}
+
+/* =========================
+   3) ACTIONS (Buttons)
+   ========================= */
+
+.cs-actions{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.cs-btn{
+  flex: 1;
+  border: none;
+  border-radius: 999px;
+
+  padding: 0.6rem 0.8rem;
+  font-size: 0.95rem;
+
+  cursor: pointer;
+  white-space: nowrap;
+
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.15s ease;
+}
+
+/* Varianten */
+.cs-btn-no{
+  background: #f3f3f5;
+}
+
+.cs-btn-yes{
+  background: #007acc;
+  color: #fff;
+}
+
+/* Interactions */
+.cs-btn:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+.cs-btn:active{
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+
+/* =========================
+   4) RESULT SECTION
+   ========================= */
+
+.cs-result{
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  font-size: 0.95rem;
+}
+
+.cs-result h3{
+  margin-top: 0;
+  margin-bottom: 0.6rem;
+  font-size: 1.2rem;
+}
+
+.cs-result ul{
+  padding-left: 1.1rem;
+  margin: 0.4rem 0 0.8rem;
+}
+
+.cs-result li{
+  margin-bottom: 0.25rem;
+}
+
+.cs-note{
+  font-size: 0.8rem;
+  color: #777;
+}
+
+/*  Ergebnis-Blocks  */
+.cs-result-list{ margin: 0; padding-left: 1.1rem; }
+.cs-result-item{ margin: 0 0 1rem 0; }
+.cs-why{ margin: .35rem 0; opacity: .95; }
+.cs-modules{ margin: .35rem 0 0; opacity: .9; }
+.cs-result-block{ margin-top: 1.25rem; }
+
+
+/* =========================
+   5) CAREER SWIPE IM MODAL – THEME LOOK (Overrides)
+   Nur überschreiben, was im Modal anders sein soll.
+   ========================= */
+
+#career-modal .career-swipe{
+  background: transparent;      /* wichtig: Modal macht den "Panel-Look" */
+  box-shadow: none;
+  color: var(--text);
+  padding: 0;                   /* im Modal weniger Doppel-Padding */
+}
+
+/* Headings + Intro */
+#career-modal .career-swipe h2{ color: var(--text); }
+
+#career-modal .cs-intro,
+#career-modal .cs-progress{
+  color: var(--muted);
+}
+
+/* Card */
+#career-modal .cs-card{
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Pills/Tags */
+#career-modal .cs-pill{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+#career-modal .cs-tag{
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* Text in der Karte */
+#career-modal .cs-title{ color: var(--text); }
+#career-modal .cs-desc{ color: var(--muted); }
+
+/* Buttons (nur Rahmen/Shadow im Modal) */
+#career-modal .cs-btn{
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Neutral */
+#career-modal .cs-btn-no{
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* Optional: “Maybe” Button (wenn vorhanden) */
+#career-modal .cs-btn-maybe{
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid color-mix(in srgb, var(--border) 70%, var(--accent));
+  box-shadow: var(--shadow);
+  opacity: 0.92;
+}
+
+/* Accent */
+#career-modal .cs-btn-yes{
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  color: #fff;
+  border: none;
+}
+
+/* Strongest / Dream */
+#career-modal .cs-btn-dream{
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent) 70%, #ffd24d),
+    color-mix(in srgb, var(--accent-2) 70%, #ffea80)
+  );
+  color: #3b2a00;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 6px 18px rgba(255, 210, 77, 0.35);
+}
+
+/* Ergebnisbereich im Modal */
+#career-modal .cs-result{
+  border-top: 1px solid var(--border);
+  color: var(--text);
+}
+
+#career-modal .cs-note{
+  color: var(--muted);
+}
+
+/* Restart-UI (wenn vorhanden) */
+#career-modal .cs-restart-wrap{
+  margin-top: 1.5rem;
+  text-align: center;
+}
+
+#career-modal .cs-btn-restart{
+  background: var(--panel);
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+#career-modal .cs-btn-restart:hover{
+  background: var(--panel-soft);
+}
+
+
+/* =========================
+   6) RESPONSIVE
+   ========================= */
+
+@media (max-width: 600px){
+  .career-swipe{
+    margin: 1rem;
+    padding: 1.2rem;
+  }
+}

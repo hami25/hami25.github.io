@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="de">
+<!--
+  Wahlprojekt – Single-Page UI (Curriculum + Modals)
+
+  Zweck dieser Datei (HTML):
+  - Statisches Grundgerüst der Seite (Layout, Bereiche, Container/Slots)
+  - Semestermodule als Karten + Modul-Info Panel (UI-Struktur)
+  - Modals/Overlays als Dialog-Struktur (Quiz, FAQ, Career-Finder, Allgemeine Infos, DS-Modal)
+  - Progressive Enhancement: Interaktionen werden vollständig durch js/main.js (type="module") aktiviert
+
+  Content-Konzept (Redakteursfreundlich / „Nicht-ITler“):
+  - Texte/Content liegen in separaten Content-Dateien (Data-only) unter js/AllgemeinContent/
+    Beispiele:
+      * FAQ:            js/AllgemeinContent/faqContent.js   → wird in #faq-list gerendert
+      * Sidebar:        js/AllgemeinContent/sidebarContent.js → wird in <aside.curriculum-facts> gerendert
+      * Allgemeine Infos: js/AllgemeinContent/infoContent.js → wird in #info-content gerendert
+  - Diese HTML enthält bewusst nur Struktur + feste IDs/Klassen/ARIA-Attribute
+  - WICHTIG: IDs, Klassen und data-* Attribute nicht umbenennen (werden von CSS/JS als „Schnittstelle“ genutzt)
+
+  Einstiegspunkte / Dateien:
+  - CSS: css/assets/app.css
+    -> Base/Layout + Komponenten (Tabs, Modul-Karten, Filter, Modals, Sidebar, etc.)
+  - JS:  js/main.js
+    -> initialisiert UI-Verhalten und bindet Renderer ein:
+       * Tabs + Tab-Indicator (Öffnen der Modals via data-target)
+       * Filter-Chips (data-filter)
+       * Modals (data-*-close / aria-hidden / ggf. Fokus)
+       * Theme Toggle (data-theme-toggle)
+       * Module-Info Panel (Inhalte aus data-desc / data-module)
+       * Content-Renderer (füllen definierte Container wie #faq-list, #info-content, Sidebar)
+-->
+
+
+<head>
+  <meta charset="utf-8"/>
+  <title>Wahlprojekt</title>
+  <meta content="width=device-width, initial-scale=1" name="viewport"/>
+
+  <!-- Haupt-Stylesheet der Anwendung -->
+  <link href="css/assets/app.css" rel="stylesheet"/>
+</head>
+
+<body>
+<!--
+  Accessibility: Skip-Link
+  - Erlaubt Tastatur-Usern direkt zum Hauptinhalt zu springen.
+  - Ziel: #main (main Landmark)
+-->
+<a class="skip-link" href="#main">Zum Inhalt springen</a>
+
+<!--
+  Layout-Grundstruktur: Zwei Spalten (CSS Grid/Flex)
+  - main#main: Curriculum + Modul-Info Panel
+  - aside: "Auf einen Blick"-Faktenkarte (statisch)
+-->
+<div class="curriculum-layout">
+  <!--
+    MAIN: primärer Seiteninhalt
+    - role="main" ist redundant bei <main>, aber okay.
+    - id="main" wird vom Skip-Link angesprungen.
+  -->
+  <main class="curriculum curriculum-main" id="main" role="main">
+    <h1 class="page-title">Curriculum Wirtschaftsinformatik</h1>
+
+    <!--
+      "Shell": Container für Topbar + Filter + Plan + Info-Panel
+      - Hilft bei max-width, padding, responsive spacing.
+    -->
+    <div class="curriculum-shell">
+
+      <!-- ========================= TOPBAR =========================
+        Enthält:
+        - Tabs (ein Teil öffnet Curriculumsicht, andere öffnen Modals)
+        - Theme Toggle (setzt data-theme am :root / documentElement)
+      -->
+      <div class="curriculum-topbar">
+
+        <!--
+          Tabs (Navigation)
+          - Buttons statt <a>, da sie UI-Zustand/Modals steuern.
+          - data-target: ID des Modals, das geöffnet werden soll.
+          - "Curriculum" Tab ist die Standardansicht (kein Modal)
+          - JS setzt/verschiebt .wi-tab-indicator zur aktiven Position.
+        -->
+        <nav aria-label="Bereiche dieser Seite" class="wi-tabs wi-tabs-funky">
+          <button class="wi-tab is-active" data-icon="📚" type="button">Curriculum</button>
+          <button class="wi-tab" data-icon="🧩" data-target="wi-quiz-modal" type="button">Mini-Quiz</button>
+          <button class="wi-tab" data-icon="🧭" data-target="career-modal" type="button">Beruf-Finder</button>
+          <button class="wi-tab" data-icon="❓" data-target="faq-modal" type="button">FAQ</button>
+          <button class="wi-tab" data-icon="ℹ️" data-target="info-modal" type="button">Allgemeine Infos</button>
+          <span class="wi-tab-indicator"></span>
+        </nav>
+
+        <!--
+          Theme Toggle
+          - data-theme-toggle wird in JS abgefangen.
+          - JS toggelt i. d. R. data-theme="dark|light" am :root
+          - aria-label für Screenreader (Emoji alleine wäre sonst unklar)
+        -->
+        <button type="button" class="theme-toggle" data-theme-toggle aria-label="Theme umschalten">
+          🌙 / ☀️
+        </button>
+      </div>
+
+      <!-- ========================= FILTERBAR =========================
+        Filter-Chips:
+        - data-filter entspricht CSS-Klassen der Module (mod-bwl, mod-wi, ...)
+        - JS dimmt/zeigt Module abhängig von ausgewähltem Filter
+        - "Alle anzeigen" (data-filter="all") ist standardmäßig aktiv
+      -->
+      <div class="legend legend-filter">
+        <span class="legend-label">Filter:</span>
+
+        <!-- Kategorie-Filter (müssen zu den Klassen an den Modul-Karten passen) -->
+        <button class="legend-item legend-bwl" data-filter="mod-bwl" type="button">
+          BWL-Grundlagen
+        </button>
+        <button class="legend-item legend-wi" data-filter="mod-wi" type="button">
+          Wirtschaftsinformatik (WI)
+        </button>
+        <button class="legend-item legend-info" data-filter="mod-info" type="button">
+          Informatik
+        </button>
+        <button class="legend-item legend-wi-info" data-filter="mod-wi-info" type="button">
+          WI und Informatik
+        </button>
+        <button class="legend-item legend-math" data-filter="mod-math" type="button">
+          Mathematik
+        </button>
+        <button class="legend-item legend-qual" data-filter="mod-qual" type="button">
+          fachübergreifende Qualifikationen
+        </button>
+        <button class="legend-item legend-egov" data-filter="mod-egov" type="button">
+          eGov (Verwaltungsinformatik)
+        </button>
+        <button class="legend-item legend-all is-active" data-filter="all" type="button">
+          Alle anzeigen
+        </button>
+      </div>
+
+      <!-- ========================= STUDIENPLAN =========================
+        Der Plan ist nach Semestern gruppiert (7 → 1).
+        Pro Semester:
+        - Header: Semesternummer + CP
+        - Liste von Modulen als klickbare Karten
+
+        Modul-Karte (<a class="module ...">):
+        - id/href: Deep-Link/Anker (kann später für echte Detailsektionen genutzt werden)
+        - Klassen mod-*:
+            * Visual: Farben/Badges
+            * Filter: JS nutzt data-filter gegen diese Klassen
+        - data-desc:
+            * Kurzbeschreibung/Label (auch für Tooltips/Info Panel)
+        - data-module (optional):
+            * Schlüssel, um im JS detailreichere Inhalte nachzuladen (z.B. aus JSON)
+        - aria-describedby + .sr-only:
+            * Screenreader bekommt eine klarere, redundante Bezeichnung inkl. CP
+      -->
+
+      <!--
+        CONTENT-BEREICH (Redakteure):
+        - Erlaubt: Modul-Titel, CP, data-desc Texte
+        - Nicht ändern: id/href (DeepLinks), Klassen mod-* (Filter), data-module (Lookup)
+       -->
+      <section class="curriculum-plan" aria-label="Studienplan">
+
+        <!-- ================= SEMESTER 7 ================= -->
+        <section class="semester-row" aria-labelledby="sem-7-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-7-title">7</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 7">
+            <li class="semester-module">
+
+              <a id="wahlmodul-internationalisierung"
+                 aria-describedby="desc-wahlmodul-internationalisierung"
+                 class="module mod-qual"
+                 data-desc="Wahlmodul Internationalisierung, 5 CP"
+                 data-module="wahlmodul-internationalisierung"
+                 href="#wahlmodul-internationalisierung">
+                <span class="module-title">Wahlmodul Internationalisierung</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+
+              <span class="sr-only" id="desc-wahlmodul-internationalisierung">
+                  Wahlmodul Internationalisierung, 5 CP
+                </span>
+            </li>
+
+            <li class="semester-module">
+              <a id="portfolio-wi"
+                 aria-describedby="desc-portfolio-wi"
+                 class="module mod-wi-info"
+                 data-desc="Portfolio Wirtschaftsinformatik, 10 CP"
+                 data-module="portfolio-wi"
+                 href="#portfolio-wi">
+                <span class="module-title">Portfolio Wirtschaftsinformatik</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-portfolio-wi">
+                  Portfolio Wirtschaftsinformatik, 10 CP
+                </span>
+            </li>
+
+            <li class="semester-module">
+              <a id="bachelor-thesis"
+                 aria-describedby="desc-bachelor-thesis"
+                 class="module mod-wi-info"
+                 data-desc="Bachelor-Thesis, 15 CP"
+                 data-module="bachelor-thesis"
+                 href="#bachelor-thesis">
+                <span class="module-title">Bachelor-Thesis</span>
+                <span class="module-cp">15 cp</span>
+              </a>
+              <span class="sr-only" id="desc-bachelor-thesis">
+                  Bachelor-Thesis, 15 CP
+                </span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 6 ================= -->
+        <section class="semester-row" aria-labelledby="sem-6-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-6-title">6</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 6">
+            <li class="semester-module">
+              <a id="berufspraktische-taetigkeit"
+                 aria-describedby="desc-berufspraktische-taetigkeit"
+                 class="module mod-wi-info"
+                 data-desc="Berufspraktische Tätigkeit, 30 CP"
+                 data-module="berufspraktische-taetigkeit"
+                 href="#berufspraktische-taetigkeit">
+                <span class="module-title">Berufspraktische Tätigkeit</span>
+                <span class="module-cp">30 cp</span>
+              </a>
+              <span class="sr-only" id="desc-berufspraktische-taetigkeit">
+                  Berufspraktische Tätigkeit, 30 CP
+                </span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 5 ================= -->
+        <section class="semester-row" aria-labelledby="sem-5-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-5-title">5</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 5">
+            <li class="semester-module">
+              <a id="cybersecurity"
+                 aria-describedby="desc-cybersecurity"
+                 class="module mod-info"
+                 data-desc="Cybersecurity, 5 CP"
+                 data-module="cybersecurity"
+                 href="#cybersecurity">
+                <span class="module-title">Cybersecurity</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-cybersecurity">Cybersecurity, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="projekt-digitalisierung"
+                 aria-describedby="desc-projekt-digitalisierung"
+                 class="module mod-wi-info mod-egov"
+                 data-desc="Projekt Digitalisierung, 10 CP"
+                 data-module="projekt-digitalisierung"
+                 href="#projekt-digitalisierung">
+                <span class="module-title">Projekt Digitalisierung</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-projekt-digitalisierung">Projekt Digitalisierung, 10 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="digitale-transformation"
+                 aria-describedby="desc-digitale-transformation"
+                 class="module mod-wi"
+                 data-desc="Digitale Transformation, 5 CP"
+                 data-module="digitale-transformation"
+                 href="#digitale-transformation">
+                <span class="module-title">Digitale Transformation</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-digitale-transformation">Digitale Transformation, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="wissenschaftliches-arbeiten"
+                 aria-describedby="desc-wissenschaftliches-arbeiten"
+                 class="module mod-qual"
+                 data-desc="Wissenschaftliches Arbeiten, 5 CP"
+                 data-module="wissenschaftliches-arbeiten"
+                 href="#wissenschaftliches-arbeiten">
+                <span class="module-title">Wissenschaftliches Arbeiten</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-wissenschaftliches-arbeiten">Wissenschaftliches Arbeiten, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="it-recht-datenschutz"
+                 aria-describedby="desc-it-recht-datenschutz"
+                 class="module mod-qual"
+                 data-desc="IT-Recht und Datenschutz, 5 CP"
+                 data-module="it-recht-datenschutz"
+                 href="#it-recht-datenschutz">
+                <span class="module-title">IT-Recht und Datenschutz</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-it-recht-datenschutz">IT-Recht und Datenschutz, 5 CP</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 4 ================= -->
+        <section class="semester-row" aria-labelledby="sem-4-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-4-title">4</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 4">
+            <li class="semester-module">
+              <a id="webentwicklung"
+                 aria-describedby="desc-webentwicklung"
+                 class="module mod-info"
+                 data-desc="Webentwicklung, 5 CP"
+                 data-module="webentwicklung"
+                 href="#webentwicklung">
+                <span class="module-title">Webentwicklung</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-webentwicklung">Webentwicklung, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="wahlmodul-wi"
+                 aria-describedby="desc-wahlmodul-wi"
+                 class="module mod-wi-info mod-egov"
+                 data-desc="Wahlmodul Wirtschaftsinformatik, 10 CP"
+                 data-module="wahlmodul-wi"
+                 href="#wahlmodul-wi">
+                <span class="module-title">Wahlmodul Wirtschaftsinformatik</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-wahlmodul-wi">Wahlmodul Wirtschaftsinformatik, 10 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="business-intelligence"
+                 aria-describedby="desc-business-intelligence"
+                 class="module mod-wi"
+                 data-desc="Business Intelligence, 10 CP"
+                 data-module="business-intelligence"
+                 href="#business-intelligence">
+                <span class="module-title">Business Intelligence</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-business-intelligence">Business Intelligence, 10 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="agiles-projektmanagement"
+                 aria-describedby="desc-agiles-projektmanagement"
+                 class="module mod-wi"
+                 data-desc="Agiles Projektmanagement, 5 CP"
+                 data-module="agiles-projektmanagement"
+                 href="#agiles-projektmanagement">
+                <span class="module-title">Agiles Projektmanagement</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-agiles-projektmanagement">Agiles Projektmanagement, 5 CP</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 3 ================= -->
+        <section class="semester-row" aria-labelledby="sem-3-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-3-title">3</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 3">
+            <li class="semester-module">
+              <a id="algorithmen-datenstrukturen"
+                 aria-describedby="desc-algorithmen-datenstrukturen"
+                 class="module mod-info"
+                 data-desc="Algorithmen und Datenstrukturen, 5 CP"
+                 data-module="algorithmen-datenstrukturen"
+                 href="#algorithmen-datenstrukturen">
+                <span class="module-title">Algorithmen und Datenstrukturen</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-algorithmen-datenstrukturen">
+                  Algorithmen und Datenstrukturen, 5 CP
+                </span>
+            </li>
+
+            <li class="semester-module">
+              <a id="softwaretechnik"
+                 aria-describedby="desc-softwaretechnik"
+                 class="module mod-info"
+                 data-desc="Softwaretechnik, 5 CP"
+                 data-module="softwaretechnik"
+                 href="#softwaretechnik">
+                <span class="module-title">Softwaretechnik</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-softwaretechnik">Softwaretechnik, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="betriebliche-informationssysteme"
+                 aria-describedby="desc-betriebliche-informationssysteme"
+                 class="module mod-wi"
+                 data-desc="Betriebliche Informationssysteme, 10 CP"
+                 data-module="betriebliche-informationssysteme"
+                 href="#betriebliche-informationssysteme">
+                <span class="module-title">Betriebliche Informationssysteme</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-betriebliche-informationssysteme">
+                  Betriebliche Informationssysteme, 10 CP
+                </span>
+            </li>
+
+            <li class="semester-module">
+              <a id="innovationsmanagement"
+                 aria-describedby="desc-innovationsmanagement"
+                 class="module mod-bwl"
+                 data-desc="Innovationsmanagement, 5 CP"
+                 data-module="innovationsmanagement"
+                 href="#innovationsmanagement">
+                <span class="module-title">Innovationsmanagement</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-innovationsmanagement">Innovationsmanagement, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="statistik-wahrscheinlichkeit"
+                 aria-describedby="desc-statistik-wahrscheinlichkeit"
+                 class="module mod-math"
+                 data-desc="Statistik und Wahrscheinlichkeitsrechnung, 5 CP"
+                 data-module="statistik-wahrscheinlichkeit"
+                 href="#statistik-wahrscheinlichkeit">
+                <span class="module-title">Statistik und Wahrscheinlichkeitsrechnung</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-statistik-wahrscheinlichkeit">
+                  Statistik und Wahrscheinlichkeitsrechnung, 5 CP
+                </span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 2 ================= -->
+        <section class="semester-row" aria-labelledby="sem-2-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-2-title">2</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 2">
+            <li class="semester-module">
+              <a id="programmiermethoden"
+                 aria-describedby="desc-programmiermethoden"
+                 class="module mod-info"
+                 data-desc="Programmiermethoden, 10 CP"
+                 data-module="programmiermethoden"
+                 href="#programmiermethoden">
+                <span class="module-title">Programmiermethoden</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-programmiermethoden">Programmiermethoden, 10 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="datenbanken"
+                 aria-describedby="desc-datenbanken"
+                 class="module mod-info"
+                 data-desc="Datenbanken, 5 CP"
+                 data-module="datenbanken"
+                 href="#datenbanken">
+                <span class="module-title">Datenbanken</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-datenbanken">Datenbanken, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="geschaeftsprozessmanagement"
+                 aria-describedby="desc-geschaeftsprozessmanagement"
+                 class="module mod-wi mod-egov"
+                 data-desc="Geschäftsprozessmanagement, 5 CP"
+                 data-module="geschaeftsprozessmanagement"
+                 href="#geschaeftsprozessmanagement">
+                <span class="module-title">Geschäftsprozessmanagement</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-geschaeftsprozessmanagement">Geschäftsprozessmanagement, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="betriebliches-rechnungswesen"
+                 aria-describedby="desc-betriebliches-rechnungswesen"
+                 class="module mod-bwl"
+                 data-desc="Betriebliches Rechnungswesen, 5 CP"
+                 data-module="betriebliches-rechnungswesen"
+                 href="#betriebliches-rechnungswesen">
+                <span class="module-title">Betriebliches Rechnungswesen</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-betriebliches-rechnungswesen">Betriebliches Rechnungswesen, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="wirtschaftsmathematik"
+                 aria-describedby="desc-wirtschaftsmathematik"
+                 class="module mod-math"
+                 data-desc="Wirtschaftsmathematik, 5 CP"
+                 data-module="wirtschaftsmathematik"
+                 href="#wirtschaftsmathematik">
+                <span class="module-title">Wirtschaftsmathematik</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-wirtschaftsmathematik">Wirtschaftsmathematik, 5 CP</span>
+            </li>
+          </ul>
+        </section>
+
+        <!-- ================= SEMESTER 1 ================= -->
+        <section class="semester-row" aria-labelledby="sem-1-title">
+          <header class="semester-label">
+            <h3 class="semester-number" id="sem-1-title">1</h3>
+            <p class="semester-cp">30 cp</p>
+          </header>
+
+          <ul class="semester-modules" aria-label="Module in Semester 1">
+            <li class="semester-module">
+              <a id="einfuehrung-informatik"
+                 aria-describedby="desc-einfuehrung-informatik"
+                 class="module mod-info"
+                 data-desc="Einführung in die Informatik, 5 CP"
+                 data-module="einfuehrung-informatik"
+                 href="#einfuehrung-informatik">
+                <span class="module-title">Einführung in die Informatik</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-einfuehrung-informatik">Einführung in die Informatik, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="oo-softwareentwicklung"
+                 aria-describedby="desc-oo-softwareentwicklung"
+                 class="module mod-info"
+                 data-desc="Objektorientierte Softwareentwicklung, 10 CP"
+                 data-module="oo-softwareentwicklung"
+                 href="#oo-softwareentwicklung">
+                <span class="module-title">Objektorientierte Softwareentwicklung</span>
+                <span class="module-cp">10 cp</span>
+              </a>
+              <span class="sr-only" id="desc-oo-softwareentwicklung">Objektorientierte Softwareentwicklung, 10 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="einfuehrung-wi"
+                 aria-describedby="desc-einfuehrung-wi"
+                 class="module mod-wi"
+                 data-desc="Einführung in die Wirtschaftsinformatik, 5 CP"
+                 data-module="einfuehrung-wi"
+                 href="#einfuehrung-wi">
+                <span class="module-title">Einführung in die Wirtschaftsinformatik</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-einfuehrung-wi">Einführung in die Wirtschaftsinformatik, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="einfuehrung-bwl"
+                 aria-describedby="desc-einfuehrung-bwl"
+                 class="module mod-bwl"
+                 data-desc="Einführung in die Betriebswirtschaft, 5 CP"
+                 data-module="einfuehrung-bwl"
+                 href="#einfuehrung-bwl">
+                <span class="module-title">Einführung in die Betriebswirtschaft</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-einfuehrung-bwl">Einführung in die Betriebswirtschaft, 5 CP</span>
+            </li>
+
+            <li class="semester-module">
+              <a id="diskrete-strukturen"
+                 aria-describedby="desc-diskrete-strukturen"
+                 class="module mod-math"
+                 data-module="diskrete-strukturen"
+                 data-desc="Diskrete Strukturen, 5 CP"
+                 href="#diskrete-strukturen">
+                <span class="module-title">Diskrete Strukturen</span>
+                <span class="module-cp">5 cp</span>
+              </a>
+              <span class="sr-only" id="desc-diskrete-strukturen">Diskrete Strukturen, 5 CP</span>
+            </li>
+          </ul>
+        </section>
+      </section>
+    </div>
+
+    <!-- ========================= MODUL-INFO PANEL =========================
+      - Wird per JS gefüllt, wenn ein Modul geklickt wird.
+      - aria-live="polite": Screenreader bekommt Updates angesagt.
+      - hidden: Panel ist initial aus, bis ein Modul gewählt wurde.
+    -->
+    <section class="module-info" id="module-info" aria-live="polite" hidden>
+      <div class="module-info-card" role="region" aria-label="Moduldetails">
+        <div class="module-info-head">
+          <div class="module-info-titlewrap">
+            <h3 class="module-info-title" id="module-info-title">Modul</h3>
+            <p class="module-info-sub" id="module-info-sub">Kurzübersicht</p>
+          </div>
+          <div class="module-info-actions">
+            <button class="module-info-btn" id="module-info-toggle" type="button" aria-expanded="false">
+              Ausklappen
+            </button>
+            <button class="module-info-close" id="module-info-close" type="button" aria-label="Details schließen">
+              ×
+            </button>
+          </div>
+        </div>
+        <div class="module-info-quick" id="module-info-quick"></div>
+        <div class="module-info-more" id="module-info-more" hidden>
+          <div class="module-info-more-inner" id="module-info-more-inner"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================= SIDEBAR =========================
+  CONTENT:
+    Sidebar-Inhalte werden aus js/AllgemeinContent/sidebarContent.js geladen.
+    Diese HTML enthält nur die Struktur.
+    Faktenkarte ("Auf einen Blick")
+    - Keine Interaktion, kann SEO/Content unterstützen
+    - Icons sind aria-hidden, Text ist die echte Information
+  -->
+  <aside class="curriculum-facts sidebar">
+    <h2 class="cf-title">Auf einen Blick</h2>
+  </aside>
+</div>
+
+<!-- ========================= OVERLAYS / MODALS =========================
+  Modals sind außerhalb des Layout-Flows platziert, damit sie "über" der Seite liegen.
+  Alle Modals folgen dem Muster:
+  - backdrop mit data-*-close
+  - dialog mit role="dialog" und aria-modal="true"
+  - Close-Button (×)
+  JS übernimmt:
+  - Öffnen via Tabs (data-target)
+  - Schließen via backdrop/close-button (data-*-close)
+  - Fokus-Handling (idealerweise: Focus Trap + return focus)
+-->
+
+<!--
+  MODAL-CONTRACT (Schnittstelle HTML ↔ JS):
+  - Öffnen: Elemente mit [data-target="..."] (Tabs) öffnen das Modal mit passender ID
+  - Schließen: Backdrop + Close-Button tragen jeweils ein data-*-close Attribut
+  - aria-hidden wird per JS gesetzt/entfernt; Fokus wird zurückgeführt (Accessibility)
+-->
+
+<!-- ========================= STUDIENGANG / MODUL MODALS ========================= -->
+<div id="module-modals">
+  <!--
+    ds-modal: generisches Dialog-Template (kann für Modul-/Studiengangdetails genutzt werden)
+    - aria-hidden wird typischerweise durch JS gesetzt/entfernt
+    - Inhalte (Titel, Intro, Body) werden dynamisch gefüllt (IDs ds-*)
+  -->
+  <div aria-hidden="true" class="ds-modal" id="ds-modal">
+    <div class="ds-modal-backdrop" data-ds-close></div>
+
+    <div class="ds-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="ds-modal-title">
+      <button class="ds-modal-close" type="button" aria-label="Fenster schließen" data-ds-close>×</button>
+
+      <h2 id="ds-modal-title"></h2>
+      <p class="ds-intro" id="ds-intro"></p>
+      <div id="ds-modal-body"></div>
+      <div class="wi-quiz-nav ds-nav-spacing">
+        <button class="wi-quiz-nav-btn" id="ds-task-prev" type="button" disabled>Zurück</button>
+        <button class="wi-quiz-nav-btn wi-quiz-nav-btn-primary" id="ds-task-next" type="button">Weiter</button>
+      </div>
+      <div class="ds-feedback ds-feedback-spacing" id="ds-task-progress"></div>
+    </div>
+  </div>
+
+  <!--
+    Video-Modal:
+    - Für Praktikum/Projektvideos etc.
+    - Video-Quelle ist auskommentiert; JS kann <source> dynamisch setzen
+  -->
+  <div class="video-modal" id="video-modal">
+    <div class="video-modal-content">
+      <span class="video-close" id="close-video">×</span>
+
+      <video controls="" id="praktikum-video" class="video-player">
+        <!-- Quelle kann serverseitig oder per JS gesetzt werden -->
+        <!-- <source src="..." type="video/mp4"> -->
+      </video>
+      <!-- Quelle für Audio -->
+      <audio id="praktikum-audio" preload="auto">
+        <source src="audio/praxissemester.mp3" type="audio/mpeg">
+      </audio>
+    </div>
+  </div>
+</div>
+
+<!-- ========================= UI / SERVICE MODALS ========================= -->
+<div id="ui-modals">
+
+  <!-- ================= MINI-QUIZ MODAL =================
+    - Mehrschritt-Formular
+    - Jede Frage in .wi-quiz-step[data-step="n"]
+    - JS zeigt jeweils genau einen Schritt (hidden toggling)
+    - Ergebnis wird in #wi-quiz-result angezeigt
+  -->
+  <div aria-hidden="true" class="wi-quiz-modal" id="wi-quiz-modal">
+    <div class="wi-quiz-backdrop" data-wi-quiz-close=""></div>
+
+    <div aria-labelledby="wi-quiz-modal-title" aria-modal="true" class="wi-quiz-dialog" role="dialog">
+      <button aria-label="Fenster schließen" class="wi-quiz-close" data-wi-quiz-close="" type="button">×</button>
+
+      <div class="wi-quiz-inner">
+        <h3>Mini-Quiz: Passt WI zu dir?</h3>
+        <p class="wi-quiz-intro">
+          Beantworte kurz die Fragen. Danach bekommst du eine Empfehlung und eine kurze Auswertung.
+        </p>
+
+        <div id="wi-scale-quiz-root"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FAQ MODAL =================
+    - Karten-UI (hover/tap) für Inhalte
+    - tabindex="0": Karten sind fokussierbar (Keyboard)
+    - .fh-more: erweiterter Textbereich (CSS/JS gesteuert)
+  -->
+  <div aria-hidden="true" class="faq-modal" id="faq-modal">
+    <div class="faq-modal-backdrop" data-faq-close=""></div>
+
+    <div aria-labelledby="faq-modal-title" aria-modal="true" class="faq-modal-dialog" role="dialog">
+      <button aria-label="Fenster schließen" class="faq-modal-close" data-faq-close="" type="button">×</button>
+
+      <section class="faq-accordion" id="faq-studium">
+        <h2 id="faq-modal-title">Häufige Fragen zum Studium</h2>
+        <p class="fh-intro">Klicke auf eine Frage, um die Antwort zu öffnen.</p>
+
+        <!-- Content wird in js/AllgemeinContent/faqContent.js gepflegt -->
+        <div class="faq-acc-list" role="list" aria-label="FAQ-Liste" id="faq-list">
+
+
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <!-- ================= CAREER MODAL =================
+    "Swipe your Future":
+    - JS rendert Cards in #cs-card
+    - Buttons schreiben Entscheidungen (yes/no)
+    - Ergebnis landet in #cs-result
+  -->
+  <div aria-hidden="true" class="career-modal" id="career-modal">
+    <div class="career-modal-backdrop" data-career-close=""></div>
+
+    <div aria-labelledby="career-modal-title" aria-modal="true" class="career-modal-dialog" role="dialog">
+      <button aria-label="Fenster schließen" class="career-modal-close" data-career-close="" type="button">×</button>
+
+      <div class="career-swipe" id="career-swipe-modal">
+        <h2 id="career-modal-title">Beruf-Finder: Swipe your Future</h2>
+
+        <p class="cs-intro">
+          Swipe dich durch ein paar Berufs-Ideen. Klicke auf <strong>„Gefällt mir“</strong> oder
+          <strong>„Nicht meins“</strong> – am Ende bekommst du deine persönlichen Vorschläge.
+        </p>
+
+        <div class="cs-progress">
+          <span id="cs-counter">1 / 5</span>
+        </div>
+
+        <div class="cs-card" id="cs-card"></div>
+
+        <div class="cs-actions">
+          <button class="cs-btn cs-btn-no" data-action="no" type="button">✖ Nicht meins</button>
+          <button class="cs-btn cs-btn-maybe" data-action="maybe" type="button">🤔 Vielleicht</button>
+          <button class="cs-btn cs-btn-yes" data-action="yes" type="button">❤️ Gefällt mir</button>
+          <button class="cs-btn cs-btn-dream" data-action="dream" type="button">⭐ Traumberuf</button>
+        </div>
+
+        <div class="cs-result" hidden="" id="cs-result"></div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= INFO MODAL =================
+    - Nutzt ds-modal Styling/Klassen, aber eigenes Close-Attribut (data-info-close)
+  -->
+  <div aria-hidden="true" class="ds-modal" id="info-modal">
+    <div class="ds-modal-backdrop" data-info-close></div>
+
+    <div class="ds-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="info-modal-title">
+      <button class="ds-modal-close" type="button" aria-label="Fenster schließen" data-info-close>×</button>
+      <h2 id="info-modal-title"></h2>
+
+      <!-- Content wird in js/AllgemeinContent/infoContent.js gepflegt -->
+      <div id="info-content"></div>
+    </div>
+  </div>
+
+
+</div>
+
+
+<!-- ========================= CHAT LAUNCHER =========================
+  Floating Button:
+  - Immer sichtbar (position: fixed)
+  - Öffnet/Schließt das Chatfenster
+  - aria-label für Screenreader (Emoji allein wäre unklar)
+-->
+<button
+  id="chat-launcher"
+  class="chat-launcher"
+  type="button"
+  aria-label="Chat öffnen"
+  onclick="toggleChat()"
+>
+  💬
+</button>
+
+<!-- ========================= CHAT WINDOW =========================
+  Chat-Container:
+  - Initial versteckt (.hidden)
+  - role="dialog" für Accessibility
+  - aria-hidden wird per JS gesetzt/entfernt
+-->
+
+<div id="chat-window" class="chat-window hidden" role="dialog" aria-label="Chatbot" aria-hidden="true">
+  <div class="chat-header">
+    <div class="chat-title">
+      <span class="chat-dot" aria-hidden="true"></span>
+      <strong>Chatbot</strong>
+      <span class="chat-sub">Fragen zum Wahlprojekt</span>
+    </div>
+    <button class="chat-close" type="button" aria-label="Chat schließen" onclick="toggleChat()">×</button>
+  </div>
+
+  <div id="chat-messages" class="chat-messages" aria-live="polite"></div>
+
+  <div class="chat-input-row">
+    <input
+      id="chat-input"
+      class="chat-input"
+      type="text"
+      placeholder="Schreib eine Nachricht…"
+      onkeypress="handleKeyPress(event)"
+      autocomplete="off"
+    />
+    <button class="chat-send" type="button" onclick="sendMessage()">Senden</button>
+  </div>
+</div>
+
+<!-- =========================
+     WELCOME MODAL
+     ========================= -->
+<div class="modal-overlay" id="quiz-modal">
+  <div class="modal-content">
+    <span class="close-btn" id="quiz-modal-close">&times;</span>
+
+    <div id="quiz-inhalt">
+      <div class="welcome-head">
+        <div class="welcome-badge">Interaktiver Modulplan</div>
+        <h1>Willkommen!</h1>
+        <p class="welcome-lead">
+          Entdecke den Studiengang Wirtschaftsinformatik auf eine interaktive Weise.
+          Zu jedem Modul erhältst du Informationen – und kannst direkt ein Quiz starten.
+        </p>
+      </div>
+
+      <div class="welcome-grid">
+        <div class="welcome-card">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Orientieren & filtern</h3>
+              <p>
+                Nutze die Tabs oberhalb des Studienplans, um Module gezielt zu filtern
+                und dir einen besseren Überblick zu verschaffen.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-card">
+          <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Modul erkunden</h3>
+              <p>
+                Wenn du über ein Modul gehst, erscheinen unterhalb des Studienplans
+                weiterführende Informationen zu diesem Fach.
+                Mit einem Klick kannst du zusätzlich das Quiz starten.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="welcome-card">
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Quiz starten</h3>
+              <p>
+                Das Quiz hilft dir dabei, einen realistischen Einblick in die Inhalte
+                des Moduls und in das Studium insgesamt zu bekommen.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="welcome-actions">
+        <button class="quiz-btn" id="quiz-modal-start" type="button">
+          Alles klar – los geht’s
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+<!-- ========================= JS ENTRYPOINT =========================
+  type="module":
+  - erlaubt Imports, scoped Variablen, modernes Bundling
+  - lädt Interaktionen erst nach dem HTML (steht am Ende für bessere Ladezeit)
+-->
+<script type="module" src="js/main.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>

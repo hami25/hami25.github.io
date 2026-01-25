@@ -1,0 +1,695 @@
+/* ==========================================================================
+  Curriculum-Ansicht + Module
+
+  Inhalt dieser Datei:
+  - Curriculum-Panel (linke Spalte)
+  - Semester-Zeilen + Modul-Kacheln
+  - Kategorie-Farben & eGov-Markierung
+  - Tooltip/Popup (optional)
+  - Responsives Verhalten
+  - Modul-Info-Panel (unter dem Curriculum)
+  - Optional/Legacy: Detailbereich (.module-details)
+
+  JS/HTML-Vertrag:
+  - .semester-modules ist typischerweise eine <ul>, .semester-module ein <li>
+  - .module trägt Kategorieklassen (z.B. .mod-wi, .mod-info, ...)
+  - .mod-egov aktiviert die eGov-Markierung
+  - .module-info-panel wird per JS ein-/ausgeblendet (siehe moduleInfoPanel.js)
+   ========================================================================== */
+
+
+/* =============================================================================
+   1) CURRICULUM PANEL (Dark Glass Card)
+   ============================================================================= */
+
+.curriculum {
+  width: 100%;
+  margin: 0 0 3rem;
+
+  padding: 1.8rem 1.4rem 2.2rem;
+  border-radius: 24px;
+
+  background: rgba(30, 41, 59, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.5);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #f3f4f6;
+
+  position: relative;
+}
+
+
+.curriculum .page-title {
+  margin: 0 0 1.6rem;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  color: #f9fafb;
+}
+
+/* Deko-Linie unter dem Titel */
+.curriculum .page-title::after {
+  content: "";
+  display: block;
+  width: 64px;
+  height: 3px;
+  margin: 0.7rem auto 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f4c289, #8dd3ce);
+}
+
+/* =============================================================================
+   2) SEMESTER ROWS
+   ============================================================================= */
+
+.semester-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 16px;
+
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+}
+
+/* =============================================================================
+   3) SEMESTER LABEL (links)
+   ============================================================================= */
+
+.semester-label {
+  align-self: flex-start;
+  width: 90px;
+
+  background: linear-gradient(180deg, #f6921e 0%, #f4c289 100%);
+  color: #fff;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 0.15rem;
+  border-radius: 14px;
+
+  padding: 0.4rem 0.3rem;
+  box-shadow: 0 10px 22px rgba(0,0,0,0.25);
+}
+
+.semester-number {
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.semester-cp {
+  margin: 0.0rem 0 0;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  opacity: 0.9;
+}
+
+/* =============================================================================
+   4) MODULE AREA (rechts, Flex-Layout)
+   ============================================================================= */
+
+/* .semester-modules ist typischerweise ein <ul>
+   - Reset von list-style/margins, damit das Flex-Layout sauber ist */
+.semester-modules {
+  display: flex;
+  flex: 1;
+  gap: 0.55rem;
+  align-items: stretch;
+}
+
+.semester-modules {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.semester-module {
+  display: contents;
+}
+
+/* =============================================================================
+   5) MODULE CARD (Kachel)
+   ============================================================================= */
+
+
+/* Wichtige Hinweise:
+   - isolation + overflow: hidden sind absichtlich:
+     * ::before (Farbbalken oben) bleibt sauber “in” der Card
+     * Layering/hover bleibt stabil */
+
+.module {
+  position: relative;
+  background: #ffffff;
+  color: #000;
+  padding: 0.7rem 1.2rem 0.8rem;
+  border-radius: 14px;
+  isolation: isolate;
+  min-height: 56px;
+  flex: 1 1 120px;
+  min-width: 0;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+  transition:
+    transform 0.14s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease;
+}
+
+.module:hover {
+  transform: translateY(-5px) scale(1.03);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.32);
+}
+
+.module-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  hyphens: auto;
+}
+
+.module-cp {
+  position: absolute;
+  right: 0.9rem;
+  bottom: 0.55rem;
+  font-size: 0.72rem;
+  opacity: 0.9;
+}
+
+/* =============================================================================
+   6) CATEGORY COLOR BAR (oberer Balken via ::before) + mod-* Modifier
+   ============================================================================= */
+
+.module::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 7px;
+  border-radius: 14px 14px 0 0;
+}
+
+
+/* BWL */
+.mod-bwl {
+  background: #fde4ea;
+}
+.mod-bwl::before {
+  background: #f44b75;
+}
+
+/* WI */
+.mod-wi {
+  background: #fdf5ed;
+}
+.mod-wi::before {
+  background: #f6921e;
+}
+
+/* Informatik */
+.mod-info {
+  background: #edf8f7;
+}
+.mod-info::before {
+  background: #8dd3ce;
+}
+
+/* Mathematik */
+.mod-math {
+  background: #f9e8ef;
+}
+.mod-math::before {
+  background: #d86a95;
+}
+
+/* Qualifikationen */
+.mod-qual {
+  background: #f3f6df;
+}
+.mod-qual::before {
+  background: #b4c530;
+}
+
+/* WI + Info */
+.mod-wi-info {
+  background: linear-gradient(
+    to right,
+    #edf8f7 35%,
+    #fdf5ed 65%
+  );
+}
+.mod-wi-info::before {
+  background: linear-gradient(to right, #8dd3ce 50%, #f6921e 50%);
+}
+
+/* =============================================================================
+   7) EGOV MARKING (Overlay-Bar + Text)
+   ============================================================================= */
+
+/* Hinweis: eGov überschreibt den normalen Farbbalken (ebenfalls ::before),
+   daher wirkt es wie “anderer Balken”. */
+
+.mod-egov::before {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0.12rem 0.3rem;
+  background: rgba(255, 255, 255, 0.85);
+  border-bottom-left-radius: 14px;
+  font-size: 0.65rem;
+}
+
+/* Sonderfälle für Farbverläufe (WI+Info / WI) */
+.module.mod-wi-info.mod-egov::before {
+  background: linear-gradient(
+    to right,
+    #8dd3ce 0%,
+    #8dd3ce 45%,
+    #f4c289 45%,
+    #f4c289 80%,
+    #555     80%,
+    #555     100%
+  );
+}
+
+.module.mod-wi.mod-egov::before {
+  background: linear-gradient(
+    to right,
+    #f4c289 0%,
+    #f4c289 80%,
+    #555    80%,
+    #555    100%
+  );
+}
+
+/* “eGov”-Text über dem Balken */
+.module.mod-egov::after {
+  content: "eGov";
+  position: absolute;
+  top: 2px;
+  right: 8px;
+  height: 7px;
+  display: flex;
+  align-items: center;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #fff;
+  pointer-events: none;
+}
+
+/* =============================================================================
+   8) MODULE POPUP (Tooltip bei Hover)
+   ============================================================================= */
+
+.module-popup {
+  position: absolute;
+  left: 50%;
+  bottom: 108%;
+  transform: translateX(-50%);
+  max-width: 260px;
+  padding: 0.6rem 0.8rem;
+  background: #fff;
+  color: #000;
+
+  border-radius: 9px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 30;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.module-popup::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: #fff transparent transparent transparent;
+}
+
+.module:hover .module-popup {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-3px);
+}
+
+
+/* =============================================================================
+   9) RESPONSIVE
+   ============================================================================= */
+
+@media (max-width: 900px){
+  .semester-row{
+    flex-direction: column;
+    gap: .55rem;
+    padding: .6rem .6rem;
+  }
+
+  .semester-label{
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: .55rem .75rem;
+  }
+
+  .semester-number{ font-size: 1.6rem; }
+
+  .semester-modules{
+    flex-wrap: wrap;
+    gap: .55rem;
+  }
+
+  .module{
+    flex: 1 1 220px;
+  }
+}
+
+@media (max-width: 520px){
+  .module{
+    flex: 1 1 100%;
+  }
+}
+
+/* =============================================================================
+   10) MODULE INFO PANEL (unter Curriculum)
+   ============================================================================= */
+
+/* Panel wird per JS sichtbar geschaltet:
+   - hidden-Attribut wird gesetzt/entfernt
+   - zusätzlich .is-open für Animation */
+.module-info{
+  margin-top: 1.1rem;
+}
+
+.module-info[hidden]{
+  display: none !important;
+}
+
+
+.module-info-card{
+  border-radius: 18px;
+  padding: 1rem 1.1rem;
+  background: var(--panel-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  position: relative;
+  overflow: hidden;
+
+  transform: translateY(10px);
+  opacity: 0;
+  transition: transform .22s ease, opacity .22s ease;
+}
+
+/* wenn sichtbar */
+.module-info.is-open .module-info-card{
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.module-info-head{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.module-info-title{
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.module-info-sub{
+  margin: .15rem 0 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+.module-info-actions{
+  display: inline-flex;
+  gap: .5rem;
+  align-items: center;
+}
+
+.module-info-btn{
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 999px;
+  padding: .45rem .75rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.module-info-close{
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.module-info-quick{
+  margin-top: .85rem;
+  color: var(--text);
+  font-size: .95rem;
+  line-height: 1.45;
+}
+
+.module-info-quick .mi-row{
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  align-items: center;
+}
+
+.module-info-quick .mi-pill{
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  padding: .25rem .6rem;
+  border-radius: 999px;
+  background: var(--panel-soft);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: .82rem;
+}
+
+.module-info-more{
+  margin-top: .9rem;
+  border-top: 1px solid var(--border);
+  padding-top: .9rem;
+}
+
+.module-info-more-inner{
+  color: var(--text);
+  font-size: .95rem;
+  line-height: 1.55;
+}
+
+/* Lightmode: Long-Text im Info-Panel stärker abdunkeln (auch für Inhalte aus longHtml) */
+:root[data-theme="light"] #module-info .module-info-more-inner,
+:root[data-theme="light"] #module-info .module-info-more-inner *{
+  color: rgba(15,23,42,.92) !important;
+  opacity: 1 !important;
+}
+
+
+/* kleine Listen im Long-Text */
+.module-info-more-inner ul{
+  margin: .4rem 0 0.2rem;
+  padding-left: 1.15rem;
+}
+.module-info-more-inner li{
+  margin-bottom: .2rem;
+}
+
+
+
+/* =============================================================================
+   11) OPTIONAL / LEGACY: Detailbereich unterhalb (falls genutzt)
+   ============================================================================= */
+
+.module-details {
+  margin-top: 48px;
+  padding: 24px;
+  border-top: 2px solid #ddd;
+}
+.module-detail {
+  padding: 16px 0;
+  border-bottom: 1px solid #eee;
+  scroll-margin-top: 24px;
+}
+.module-detail h3 { margin: 0 0 8px; }
+.module-detail .meta { opacity: .8; font-size: 0.95em; }
+
+
+/* =============================================================================
+   12) BUTTON FÜR MOBILE
+   ============================================================================= */
+
+.module-info-cta{
+  margin-top: .9rem;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.module-info-start-quiz{
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  color: #fff;
+  font-weight: 800;
+  padding: .7rem 1rem;
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+}
+
+.module-info-start-quiz:active{
+  transform: translateY(1px);
+}
+
+
+
+/* =========================
+  MOBILE
+   ========================= */
+@media (max-width: 980px){
+
+  /* Wichtig: sonst werden rechte Buttons abgeschnitten */
+  .module-info-card{
+    overflow: visible;
+    z-index: 5;
+  }
+
+  /* Head auf Mobile stapeln, damit Aktionen nicht rechts raus laufen */
+  .module-info-head{
+    flex-direction: column;
+    align-items: stretch;
+    gap: .6rem;
+  }
+
+  /* Buttons sollen innerhalb bleiben und umbrechen dürfen */
+  .module-info-actions{
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* Schließen-Button rechts halten, aber ohne rauszuschieben */
+  .module-info-close{
+    margin-left: auto;
+  }
+
+  /* CTA Button */
+  .module-info-cta{
+    margin-top: .9rem;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .module-info-start-quiz{
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: .7rem 1rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+    color: #fff;
+    box-shadow: var(--shadow);
+  }
+
+  .module-info-start-quiz:active{
+    transform: translateY(1px);
+  }
+
+  .module-info-more{
+    background: rgba(15,23,42,0.04);
+    border-radius: 14px;
+    padding: .9rem;
+    margin-top: .9rem;
+  }
+
+  /* Mehr-Infos innerhalb der Kachel scrollbar (statt Seite zu scrollen) */
+  .module-info-more{
+    max-height: min(60vh, 520px);
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .module-info-more{
+    background: var(--panel);
+    border-radius: 14px;
+    padding: .9rem;
+  }
+}
+
+
+
+/* Mehr-Infos sichtbar machen */
+.module-info-more[hidden] { display: none !important; }
+.module-info-more { display: block; }
+
+.module-info-more-inner {
+  display: block;
+  color: inherit !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+
+.module-info-more-inner p,
+.module-info-more-inner li,
+.module-info-more-inner ul {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+
+.module-info-card { overflow: visible !important; }
+.module-info-more { overflow: visible !important; }
+
+
+/*Für Mobile*/
+
+/* Info-Kachel soll mit Inhalt wachsen */
+#module-info .module-info-card{
+  height: auto;
+  overflow: visible;
+}
+
+/* Long-Text sauber umbrechen, damit nichts "rausragt" */
+#module-info .module-info-more-inner{
+  overflow: visible;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+/* Listen/Abstände angenehm */
+#module-info .module-info-more-inner p{
+  margin: 0 0 .75rem;
+}
+#module-info .module-info-more-inner ul{
+  margin: .25rem 0 .75rem 1.1rem;
+}
+
+
+

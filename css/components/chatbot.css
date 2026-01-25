@@ -1,0 +1,233 @@
+/* ==========================================================================
+   Floating Chatbot – Glass Look
+   Zweck:
+   - Schwebender Chat unten rechts
+   - Visuell konsistent mit bestehenden Modals (Glass / Tokens)
+   ========================================================================== */
+
+.hidden { display: none !important; }
+
+/* =========================
+   CHAT LAUNCHER (Button)
+   ========================= */
+.chat-launcher{
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 10000;
+
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  color: #fff;
+
+  box-shadow: var(--shadow);
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.25rem;
+  transition: transform .16s ease, filter .16s ease;
+}
+
+.chat-launcher:hover{
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+/* =========================
+   CHAT WINDOW
+   ========================= */
+.chat-window{
+  position: fixed;
+  right: 22px;
+  bottom: 90px;
+  z-index: 10000;
+
+  width: min(360px, calc(100vw - 44px));
+  height: 460px;
+
+  border-radius: 18px;
+  border: 1px solid var(--border);
+
+  background: var(--panel-strong);
+  box-shadow: var(--shadow);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* =========================
+   HEADER
+   ========================= */
+.chat-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+
+  padding: .85rem .9rem;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
+}
+
+.chat-title{
+  display: grid;
+  grid-template-columns: 10px 1fr;
+  grid-template-rows: auto auto;
+  column-gap: .55rem;
+  row-gap: .05rem;
+  align-items: center;
+}
+
+/* Statuspunkt (visuell) */
+.chat-dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--accent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 70%, transparent);
+  grid-row: 1 / span 2;
+}
+
+.chat-title strong{
+  color: var(--text);
+  font-size: .98rem;
+  line-height: 1.1;
+}
+
+.chat-sub{
+  color: var(--muted);
+  font-size: .78rem;
+  line-height: 1.1;
+}
+
+.chat-close{
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: transform .16s ease, filter .16s ease;
+}
+.chat-close:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.06);
+}
+
+/* =========================
+   MESSAGE AREA
+   ========================= */
+.chat-messages{
+  flex: 1;
+  padding: .85rem .85rem .6rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+/* Message bubbles */
+.message{
+  max-width: 85%;
+  padding: .55rem .7rem;
+  border-radius: 14px;
+  line-height: 1.35;
+  font-size: .92rem;
+  border: 1px solid var(--border);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.user-message{
+  align-self: flex-end;
+  background: color-mix(in srgb, var(--accent) 18%, var(--panel-strong));
+  color: var(--text);
+}
+
+.bot-message{
+  align-self: flex-start;
+  background: var(--panel-soft);
+  color: var(--text);
+}
+
+/* =========================
+   INPUT ROW
+   ========================= */
+.chat-input-row{
+  display: flex;
+  gap: .55rem;
+  padding: .75rem .85rem;
+  border-top: 1px solid var(--border);
+  background: color-mix(in srgb, var(--panel-strong) 70%, transparent);
+}
+
+.chat-input{
+  flex: 1;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  padding: .55rem .75rem;
+  outline: none;
+}
+
+.chat-input::placeholder{
+  color: color-mix(in srgb, var(--muted) 90%, transparent);
+}
+
+.chat-send{
+  border: none;
+  border-radius: 999px;
+  padding: .55rem .85rem;
+
+  background: linear-gradient(135deg, var(--accent-2), var(--accent), var(--accent-3));
+  color: #fff;
+
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  font-weight: 700;
+  transition: transform .12s ease, filter .12s ease;
+}
+
+.chat-send:hover{
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+/* iOS Safari: Auto-Zoom beim Fokussieren verhindern */
+@supports (-webkit-touch-callout: none) {
+  @media (max-width: 900px){
+    #chat-window input,
+    #chat-window textarea,
+    #chat-window select{
+      font-size: 16px !important;
+      line-height: 1.25;
+    }
+  }
+}
+
